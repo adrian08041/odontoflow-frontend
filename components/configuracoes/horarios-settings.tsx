@@ -43,8 +43,7 @@ export function HorariosSettings() {
     name: "dias",
   });
 
-  const onSubmit = (data: HorariosFormData) => {
-    console.log("Horarios salvos:", data);
+  const onSubmit = (_data: HorariosFormData) => {
     toast.success("Horarios salvos com sucesso!");
   };
 
@@ -67,6 +66,9 @@ export function HorariosSettings() {
                   <div className="flex items-center gap-3">
                     <button
                       type="button"
+                      role="switch"
+                      aria-checked={isActive}
+                      aria-labelledby={`day-toggle-label-${index}`}
                       onClick={() => setValue(`dias.${index}.active`, !isActive, { shouldDirty: true })}
                       className={cn(
                         "relative inline-flex h-7 w-12 items-center rounded-full transition-colors",
@@ -80,7 +82,9 @@ export function HorariosSettings() {
                         )}
                       />
                     </button>
-                    <span className="text-[16px] font-black text-[#0f274c]">{field.label}</span>
+                    <span id={`day-toggle-label-${index}`} className="text-[16px] font-black text-[#0f274c]">
+                      {field.label}
+                    </span>
                   </div>
 
                   <div>
