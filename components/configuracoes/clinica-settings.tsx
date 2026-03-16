@@ -46,9 +46,8 @@ export function ClinicaSettings() {
     },
   });
 
-  const onSubmit = (data: ClinicaFormData) => {
+  const onSubmit = (_data: ClinicaFormData) => {
     toast.success("Configuracoes atualizadas com sucesso!");
-    console.log("Salvo:", data);
   };
 
   const inputClassName =
