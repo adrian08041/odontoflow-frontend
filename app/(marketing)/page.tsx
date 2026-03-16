@@ -1,6 +1,6 @@
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
 import {
+  type LucideIcon,
   ArrowRight,
   CalendarDays,
   Check,
