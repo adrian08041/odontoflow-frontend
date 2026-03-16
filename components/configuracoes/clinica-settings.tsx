@@ -42,7 +42,7 @@ export function ClinicaSettings() {
       telefone: "(11) 4567-8900",
       endereco: "Av. Paulista, 1200 - Conj 12 - Sao Paulo, SP",
       email: "contato@odontoflow.com",
-      website: "www.odontoflow.com.br",
+      website: "https://www.odontoflow.com.br",
     },
   });
 
