@@ -6,7 +6,7 @@ Por favor, leiam e tentem seguir as regras descritas abaixo.
 
 ---
 
-## 🏗️ 1. Arquitetura e Stack Tecnológica
+## 🏗️ 1. Arquitetura e Stack Tecnológica:
 
 O projeto foi construído utilizando as seguintes tecnologias:
 
