@@ -59,8 +59,9 @@ export function Sidebar({ className, onNavigate }: { className?: string; onNavig
         <aside className={cn("w-64 bg-slate-900 text-slate-300 flex flex-col justify-between shrink-0", className)}>
             <div>
                 <div className="h-16 flex items-center px-6 border-b border-slate-800">
-                    <div className="bg-teal-600 w-8 h-8 rounded-lg flex items-center justify-center mr-3">
-                        <span className="text-white font-bold">O</span>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center mr-3 overflow-hidden bg-teal-600">
+                        <img src="/odonto.png" alt="OdontoFlow" className="w-7 h-7 object-contain" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                        <span className="text-white font-bold sr-only">O</span>
                     </div>
                     <h1 className="text-white text-xl font-bold tracking-tight cursor-default">OdontoFlow</h1>
                 </div>
