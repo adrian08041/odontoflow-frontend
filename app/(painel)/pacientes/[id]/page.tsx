@@ -39,8 +39,6 @@ export default function PatientProfilePage() {
   // Fallback if patient is not found in mock data
   const patient = MOCK_PATIENTS.find((p) => p.id === id) || MOCK_PATIENTS[0];
 
-  const breadcrumbs = ["SaaS Dashboard", "Pacientes", patient.name];
-
   return (
     <>
       <div className="max-w-5xl mx-auto space-y-6 md:pb-8 pt-2">
@@ -487,6 +485,7 @@ export default function PatientProfilePage() {
               <div className="w-[200px] shrink-0 bg-white rounded-[12px] border border-slate-200 overflow-hidden flex flex-col shadow-[0_2px_4px_rgba(0,0,0,0.02)]">
                 <div className="h-[180px] bg-[#eef2f6] p-4 flex items-center justify-center">
                   <div className="w-full h-full rounded-[8px] bg-slate-200 overflow-hidden relative">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="https://images.unsplash.com/photo-1549471013-3364d7220b75?q=80&w=200&auto=format&fit=crop"
                       alt="Intraoral"
