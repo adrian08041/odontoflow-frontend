@@ -1,27 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { Search, Bell, Menu, ChevronRight, ChevronDown, Check, Calendar as CalendarIcon, AlertTriangle, User as UserIcon, Settings as SettingsIcon, LogOut as LogOutIcon } from "lucide-react";
-import {
-    DropdownMenu,
-    DropdownMenuTrigger,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
 import { useState, useEffect } from "react";
-import { Search, Bell, ChevronRight, User, Settings, LogOut, ChevronDown } from "lucide-react";
+import { Search, Bell, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 interface HeaderProps {
     breadcrumbs?: string[];
@@ -30,11 +12,6 @@ interface HeaderProps {
 export function Header({ breadcrumbs }: HeaderProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const [userFirstName, setUserFirstName] = useState("Dra. Ana");
-    const [userFullName, setUserFullName] = useState("Dra. Ana Silva");
-    const [userRole, setUserRole] = useState("Dentista");
-    const [userEmail, setUserEmail] = useState("ana.silva@odontoflow.com");
-    const router = useRouter();
-    const [userName, setUserName] = useState("Dra. Ana");
 
     // Load user data on mount
     useEffect(() => {
@@ -42,18 +19,9 @@ export function Header({ breadcrumbs }: HeaderProps) {
             const storedUser = localStorage.getItem("user");
             if (storedUser) {
                 const parsedUser = JSON.parse(storedUser);
-                /* eslint-disable react-hooks/set-state-in-effect */
                 if (parsedUser.firstName) {
                     setUserFirstName(parsedUser.firstName);
-                    setUserFullName(parsedUser.firstName + (parsedUser.lastName ? ` ${parsedUser.lastName}` : ""));
                 }
-                if (parsedUser.role) {
-                    setUserRole(parsedUser.role);
-                }
-                if (parsedUser.email) {
-                    setUserEmail(parsedUser.email);
-                }
-                /* eslint-enable react-hooks/set-state-in-effect */
             }
         } catch (e) {
             console.error("Failed to parse user from local storage", e);
