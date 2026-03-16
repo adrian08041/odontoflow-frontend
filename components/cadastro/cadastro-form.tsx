@@ -205,7 +205,7 @@ export function CadastroForm() {
             {/* Footer Text */}
             <p className="font-medium text-[#6a7282] text-[16px] leading-[24px] text-center mt-6">
                 Já possui uma conta?{" "}
-                <Link href="/" className="font-bold text-[#0d9488] hover:underline">
+                <Link href="/login" className="font-bold text-[#0d9488] hover:underline">
                     Faça login
                 </Link>
             </p>
