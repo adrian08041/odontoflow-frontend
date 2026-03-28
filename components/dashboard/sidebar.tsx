@@ -56,10 +56,10 @@ export function Sidebar({ className, onNavigate }: { className?: string; onNavig
     };
 
     return (
-        <aside className={cn("w-64 bg-slate-900 text-slate-300 flex flex-col justify-between shrink-0", className)}>
+        <aside className={cn("w-64 bg-background-sidebar text-white/70 flex flex-col justify-between shrink-0", className)}>
             <div>
-                <div className="h-16 flex items-center px-6 border-b border-slate-800">
-                    <div className="bg-teal-600 w-8 h-8 rounded-lg flex items-center justify-center mr-3">
+                <div className="h-16 flex items-center px-6 border-b border-white/10">
+                    <div className="bg-brand-primary w-8 h-8 rounded-lg flex items-center justify-center mr-3">
                         <span className="text-white font-bold">O</span>
                     </div>
                     <h1 className="text-white text-xl font-bold tracking-tight cursor-default">OdontoFlow</h1>
@@ -80,11 +80,11 @@ export function Sidebar({ className, onNavigate }: { className?: string; onNavig
                                 className={cn(
                                     "flex items-center px-4 py-2 text-sm rounded-lg transition-colors",
                                     isActive
-                                        ? "bg-teal-900/40 text-teal-400 border border-teal-800/50"
-                                        : "hover:bg-slate-800"
+                                        ? "bg-brand-primary/20 text-brand-primary border border-brand-primary/30"
+                                        : "hover:bg-white/10"
                                 )}
                             >
-                                <Icon className={cn("w-5 h-5 mr-3", isActive ? "text-teal-500" : "text-slate-400")} />
+                                <Icon className={cn("w-5 h-5 mr-3", isActive ? "text-brand-primary" : "text-white/50")} />
                                 {item.name}
                             </Link>
                         )
@@ -92,33 +92,33 @@ export function Sidebar({ className, onNavigate }: { className?: string; onNavig
                 </nav>
             </div>
 
-            <div className="p-4 border-t border-slate-800">
+            <div className="p-4 border-t border-white/10">
                 <Link
                     href="/configuracoes"
                     onClick={onNavigate}
                     className={cn(
                         "w-full flex items-center px-4 py-2 text-sm rounded-lg transition-colors mb-2",
                         pathname?.startsWith("/configuracoes")
-                            ? "bg-teal-900/40 text-teal-400 border border-teal-800/50"
-                            : "text-slate-300 hover:bg-slate-800"
+                            ? "bg-brand-primary/20 text-brand-primary border border-brand-primary/30"
+                            : "text-white/70 hover:bg-white/10"
                     )}
                 >
-                    <Settings className={cn("w-5 h-5 mr-3", pathname?.startsWith("/configuracoes") ? "text-teal-500" : "text-slate-400")} /> Configurações
+                    <Settings className={cn("w-5 h-5 mr-3", pathname?.startsWith("/configuracoes") ? "text-brand-primary" : "text-white/50")} /> Configurações
                 </Link>
-                <div className="flex items-center p-3 mt-2 rounded-xl border border-slate-700 bg-slate-800/50">
-                    <Avatar className="w-10 h-10 border-2 border-slate-600">
+                <div className="flex items-center p-3 mt-2 rounded-xl border border-white/10 bg-white/5">
+                    <Avatar className="w-10 h-10 border-2 border-white/20">
                         <AvatarImage src="https://i.pravatar.cc/150?u=ana-silva" />
                         <AvatarFallback>{user.initials}</AvatarFallback>
                     </Avatar>
                     <div className="ml-3 flex-1 overflow-hidden">
                         <p className="text-sm font-medium text-white truncate">{user.name}</p>
-                        <p className="text-xs text-slate-400 truncate">{user.role}</p>
+                        <p className="text-xs text-white/50 truncate">{user.role}</p>
                     </div>
                     <Button
                         onClick={handleLogout}
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-slate-400 hover:text-white hover:bg-slate-700 mt-0.5 ml-2"
+                        className="h-8 w-8 text-white/50 hover:text-white hover:bg-white/15 mt-0.5 ml-2"
                     >
                         <LogOut className="w-4 h-4" />
                     </Button>

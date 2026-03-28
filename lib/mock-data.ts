@@ -6,6 +6,14 @@ import type {
   FinanceReceivable,
   FinancePaymentMethod,
   TreatmentPlan,
+  DashboardStat,
+  ScheduleEntry,
+  GoalProgress,
+  DashboardAlert,
+  WeeklyChartBar,
+  PatientTimelineEntry,
+  PatientFinancialRecord,
+  PatientDocument,
 } from "@/lib/types";
 
 // As per design, the login page doesn't strictly require data mapping here,
@@ -166,6 +174,229 @@ export const FINANCE_PAYMENT_METHODS: FinancePaymentMethod[] = [
 
 export const FINANCE_LINE_POINTS = [38, 42, 40, 48, 41, 45];
 export const FINANCE_LINE_LABELS = ["Set", "Out", "Nov", "Dez", "Jan", "Fev"];
+
+// Dashboard
+
+export const DASHBOARD_STATS: DashboardStat[] = [
+  {
+    title: "Consultas Hoje",
+    value: "12",
+    iconName: "CalendarCheck",
+    trend: { value: "20%", label: "vs período anterior" },
+  },
+  {
+    title: "Confirmadas",
+    value: "8/12",
+    subtitle: "(66%)",
+    iconName: "CheckCircle",
+    trend: { value: "5%", label: "vs período anterior" },
+  },
+  {
+    title: "Faturamento do Mês",
+    value: "R$ 45.200",
+    iconName: "DollarSign",
+    trend: { value: "12%", label: "vs período anterior" },
+  },
+  {
+    title: "Novos Pacientes",
+    value: "15",
+    iconName: "Users",
+    trend: { value: "este mês", label: "vs período anterior" },
+  },
+];
+
+export const DASHBOARD_SCHEDULE: ScheduleEntry[] = [
+  {
+    id: "ds1",
+    time: "08:00",
+    patientName: "Mariana Costa",
+    patientAvatar:
+      "https://api.dicebear.com/9.x/avataaars/png?seed=MarianaCosta&backgroundColor=f0f9ff",
+    procedure: "Limpeza e Profilaxia",
+    dentist: "Dra. Ana Silva",
+    status: "confirmed",
+  },
+  {
+    id: "ds2",
+    time: "09:30",
+    patientName: "Ricardo Mendes",
+    patientAvatar:
+      "https://api.dicebear.com/9.x/avataaars/png?seed=RicardoMendes&backgroundColor=ecfdf5",
+    procedure: "Restauração Resina",
+    dentist: "Dra. Ana Silva",
+    status: "pending",
+  },
+  {
+    id: "ds3",
+    time: "11:00",
+    patientName: "Julia Albuquerque",
+    patientAvatar:
+      "https://api.dicebear.com/9.x/avataaars/png?seed=JuliaAlbuquerque&backgroundColor=f0f9ff",
+    procedure: "Invisalign Follow-up",
+    dentist: "Dr. Lucas Ferraz",
+    status: "confirmed",
+  },
+  {
+    id: "ds4",
+    time: "14:00",
+    patientName: "Carlos Eduardo",
+    patientAvatar:
+      "https://api.dicebear.com/9.x/avataaars/png?seed=CarlosEduardo&backgroundColor=f0f9ff",
+    procedure: "Canal (Endodontia)",
+    dentist: "Dra. Ana Silva",
+    status: "cancelled",
+  },
+  {
+    id: "ds5",
+    time: "15:30",
+    patientName: "Beatriz Santos",
+    patientAvatar:
+      "https://api.dicebear.com/9.x/avataaars/png?seed=BeatrizSantos&backgroundColor=ecfdf5",
+    procedure: "Clareamento Dental",
+    dentist: "Dr. Lucas Ferraz",
+    status: "confirmed",
+  },
+  {
+    id: "ds6",
+    time: "17:00",
+    patientName: "Fernando Souza",
+    patientAvatar:
+      "https://api.dicebear.com/9.x/avataaars/png?seed=FernandoSouza&backgroundColor=f0f9ff",
+    procedure: "Primeira Consulta",
+    dentist: "Dra. Ana Silva",
+    status: "pending",
+  },
+];
+
+export const DASHBOARD_GOALS: GoalProgress[] = [
+  {
+    label: "Meta de Faturamento",
+    current: "R$ 45k",
+    target: "R$ 60k",
+    percentage: 75,
+    variant: "brand",
+  },
+  {
+    label: "Novos Tratamentos",
+    current: "12",
+    target: "20",
+    percentage: 60,
+    variant: "warning",
+  },
+];
+
+export const DASHBOARD_ALERTS: DashboardAlert[] = [
+  {
+    id: "da1",
+    message: "3 pacientes não confirmaram amanhã",
+    variant: "warning",
+    iconName: "AlertCircle",
+  },
+  {
+    id: "da2",
+    message: "2 pagamentos vencidos hoje",
+    variant: "danger",
+    iconName: "CreditCard",
+  },
+  {
+    id: "da3",
+    message: "Aniversariante: João Silva",
+    variant: "success",
+    iconName: "Gift",
+  },
+];
+
+export const DASHBOARD_WEEKLY_CHART: WeeklyChartBar[] = [
+  { label: "Seg", percentage: 60, variant: "primary" },
+  { label: "Ter", percentage: 90, variant: "dark" },
+  { label: "Qua", percentage: 75, variant: "primary" },
+  { label: "Qui", percentage: 55, variant: "primary" },
+  { label: "Sex", percentage: 80, variant: "accent" },
+  { label: "Sáb", percentage: 65, variant: "primary" },
+];
+
+// Patient Profile
+
+export const PATIENT_TIMELINE: PatientTimelineEntry[] = [
+  {
+    id: "pt1",
+    label: "Próxima Consulta",
+    status: "upcoming",
+    procedure: "Manutenção de Aparelho Ortodôntico",
+    date: "25 de Fevereiro, 2026 às 14:30",
+    paymentStatus: undefined,
+  },
+  {
+    id: "pt2",
+    label: "Finalizado",
+    status: "completed",
+    procedure: "Limpeza e Profilaxia",
+    date: "12 de Fevereiro, 2026 às 10:00",
+    paymentStatus: "paid",
+  },
+  {
+    id: "pt3",
+    label: "Finalizado",
+    status: "completed",
+    procedure: "Avaliação Inicial",
+    date: "28 de Janeiro, 2026 às 09:00",
+    paymentStatus: "paid",
+  },
+];
+
+export const PATIENT_FINANCIAL_RECORDS: PatientFinancialRecord[] = [
+  {
+    id: "pf1",
+    description: "Parcela 02/12 - Aparelho",
+    date: "10/02/2026",
+    value: "R$ 150,00",
+    status: "paid",
+    hasReceipt: true,
+  },
+  {
+    id: "pf2",
+    description: "Limpeza e Profilaxia",
+    date: "12/02/2026",
+    value: "R$ 220,00",
+    status: "paid",
+    hasReceipt: true,
+  },
+  {
+    id: "pf3",
+    description: "Parcela 03/12 - Aparelho",
+    date: "10/03/2026",
+    value: "R$ 150,00",
+    status: "pending",
+    hasReceipt: false,
+  },
+];
+
+export const PATIENT_DOCUMENTS: PatientDocument[] = [
+  {
+    id: "pd1",
+    name: "Panorâmica_v1.jpg",
+    date: "12/02/2026",
+    size: "2.4 MB",
+    type: "image",
+  },
+  {
+    id: "pd2",
+    name: "Contrato_Prestacao.pdf",
+    date: "28/01/2026",
+    size: "1.1 MB",
+    type: "pdf",
+  },
+  {
+    id: "pd3",
+    name: "Intraoral_sup.png",
+    date: "05/02/2026",
+    size: "4.8 MB",
+    type: "photo",
+    previewUrl: "https://images.unsplash.com/photo-1549471013-3364d7220b75?q=80&w=200&auto=format&fit=crop",
+  },
+];
+
+// Treatments
 
 export const TREATMENT_INITIAL_PLANS: TreatmentPlan[] = [
   {
