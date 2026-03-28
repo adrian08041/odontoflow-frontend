@@ -87,3 +87,79 @@ export interface TreatmentPlan {
   totalProcedures: number;
   procedures: TreatmentProcedure[];
 }
+
+// Dashboard
+
+export type ScheduleStatus = "confirmed" | "pending" | "cancelled";
+
+export interface DashboardStat {
+  title: string;
+  value: string;
+  subtitle?: string;
+  iconName: string;
+  trend?: {
+    value: string;
+    label: string;
+  };
+}
+
+export interface ScheduleEntry {
+  id: string;
+  time: string;
+  patientName: string;
+  patientAvatar: string;
+  procedure: string;
+  dentist: string;
+  status: ScheduleStatus;
+}
+
+export interface GoalProgress {
+  label: string;
+  current: string;
+  target: string;
+  percentage: number;
+  variant: "brand" | "warning";
+}
+
+export interface DashboardAlert {
+  id: string;
+  message: string;
+  variant: "warning" | "danger" | "success";
+  iconName: string;
+}
+
+export interface WeeklyChartBar {
+  label: string;
+  percentage: number;
+  variant: "primary" | "dark" | "accent";
+}
+
+export type PatientTimelineStatus = "upcoming" | "completed"
+export type PatientPaymentStatus = "paid" | "pending"
+
+export interface PatientTimelineEntry {
+  id: string
+  label: string
+  status: PatientTimelineStatus
+  procedure: string
+  date: string
+  paymentStatus?: "paid" | "pending"
+}
+
+export interface PatientFinancialRecord {
+  id: string
+  description: string
+  date: string
+  value: string
+  status: PatientPaymentStatus
+  hasReceipt: boolean
+}
+
+export interface PatientDocument {
+  id: string
+  name: string
+  date: string
+  size: string
+  type: "image" | "pdf" | "photo"
+  previewUrl?: string
+}

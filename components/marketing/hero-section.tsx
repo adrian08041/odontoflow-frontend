@@ -9,23 +9,23 @@ export function HeroSection() {
     >
       <div className="mx-auto grid min-h-[calc(100vh-88px)] max-w-7xl items-center gap-14 px-6 py-16 lg:grid-cols-[1.05fr_0.95fr] lg:px-8">
         <div className="max-w-xl">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[var(--color-surface-chip)] px-4 py-2 text-sm font-semibold text-[var(--color-surface-chip-text)]">
+          <div className="animate-hero-in inline-flex items-center gap-2 rounded-full bg-[var(--color-surface-chip)] px-4 py-2 text-sm font-semibold text-[var(--color-surface-chip-text)]">
             <Sparkles className="h-4 w-4" />
             Tecnologia de ponta em Odontologia
           </div>
-          <h1 className="mt-8 text-5xl font-black leading-[1.05] tracking-tight text-[var(--color-ink-strong)] md:text-6xl">
+          <h1 className="animate-hero-in-delay-1 mt-8 text-5xl font-black leading-[1.05] tracking-tight text-[var(--color-ink-strong)] md:text-6xl">
             Seu sorriso merece o
             <span className="mt-2 block text-[var(--color-brand-teal)]">
               melhor cuidado
             </span>
           </h1>
-          <div className="mt-3 h-1.5 w-44 rounded-full bg-[var(--color-warning-accent-muted)]" />
-          <p className="mt-6 text-xl leading-9 text-[var(--color-text-section)]">
+          <div className="animate-hero-in-delay-1 mt-3 h-1.5 w-44 rounded-full bg-[var(--color-warning-accent-muted)]" />
+          <p className="animate-hero-in-delay-2 mt-6 text-xl leading-9 text-[var(--color-text-section)]">
             Agende sua consulta online em segundos. Tratamentos modernos com
             profissionais especializados e atendimento humanizado para toda a
             família.
           </p>
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+          <div className="animate-hero-in-delay-3 mt-10 flex flex-col gap-4 sm:flex-row">
             <Link
               href="/cadastro"
               className="inline-flex items-center justify-center gap-3 rounded-2xl bg-[var(--color-brand-teal)] px-8 py-4 text-lg font-bold text-white shadow-[0_14px_34px_var(--color-brand-teal-glow)] transition hover:-translate-y-0.5 hover:bg-[var(--color-brand-teal-dark)]"
@@ -41,7 +41,7 @@ export function HeroSection() {
               Conheça a Clínica
             </Link>
           </div>
-          <div className="mt-10 flex flex-wrap items-center gap-5 text-sm font-semibold text-[var(--color-text-muted-alt)]">
+          <div className="animate-hero-in-delay-4 mt-10 flex flex-wrap items-center gap-5 text-sm font-semibold text-[var(--color-text-muted-alt)]">
             <div className="flex items-center gap-1 text-[var(--color-warning-accent-soft)]">
               {Array.from({ length: 5 }).map((_, index) => (
                 <Star key={index} className="h-4 w-4 fill-current" />
@@ -63,8 +63,8 @@ export function HeroSection() {
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-[460px]">
-          <div className="absolute -left-6 top-6 rounded-3xl bg-white px-5 py-4 shadow-[0_16px_38px_rgba(var(--shadow-marketing-rgb),0.12)]">
+        <div className="animate-hero-in-delay-2 relative mx-auto w-full max-w-[460px]">
+          <div className="animate-float absolute -left-6 top-6 rounded-3xl bg-white px-5 py-4 shadow-[0_16px_38px_rgba(var(--shadow-marketing-rgb),0.12)]">
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-text-muted-alt)]">
               Qualidade
             </p>
@@ -72,7 +72,7 @@ export function HeroSection() {
               Premium
             </p>
           </div>
-          <div className="absolute -bottom-6 right-0 rounded-3xl bg-white px-5 py-4 shadow-[0_16px_38px_rgba(var(--shadow-marketing-rgb),0.12)]">
+          <div className="animate-float-delayed absolute -bottom-6 right-0 rounded-3xl bg-white px-5 py-4 shadow-[0_16px_38px_rgba(var(--shadow-marketing-rgb),0.12)]">
             <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-text-muted-alt)]">
               Avaliação
             </p>
@@ -82,7 +82,12 @@ export function HeroSection() {
             </p>
           </div>
           <div className="overflow-hidden rounded-[2rem] border-[6px] border-white bg-[var(--color-surface-muted-alt)] shadow-[0_26px_70px_rgba(var(--shadow-marketing-rgb),0.16)]">
-            <div className="h-[570px] marketing-hero-image" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=800&auto=format&fit=crop&q=80"
+              alt="Consultório odontológico moderno"
+              className="h-[570px] w-full object-cover"
+            />
           </div>
         </div>
       </div>

@@ -24,7 +24,7 @@ export function MobileNav() {
 
     return (
         <div
-            className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-100 shadow-[0_-4px_15px_rgba(0,0,0,0.03)]"
+            className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border-light shadow-[0_-4px_15px_rgba(0,0,0,0.03)]"
             style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
         >
             <div className="flex justify-around items-center h-[72px] px-2">
@@ -39,7 +39,7 @@ export function MobileNav() {
                             href={item.href}
                             className={cn(
                                 "flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors",
-                                isActive ? "text-teal-600" : "text-slate-400 hover:text-slate-600"
+                                isActive ? "text-brand-primary" : "text-text-muted hover:text-text-secondary"
                             )}
                         >
                             <Icon className={cn("w-6 h-6", isActive ? "stroke-[2.5px]" : "stroke-2")} />

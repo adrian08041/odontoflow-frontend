@@ -38,7 +38,7 @@ export function SettingsContent() {
                 return <LGPDSettings />;
             default:
                 return (
-                    <div className="flex h-[400px] flex-col items-center justify-center rounded-[14px] border border-dashed border-slate-300 bg-slate-50 text-slate-500">
+                    <div className="flex h-[400px] flex-col items-center justify-center rounded-[14px] border border-dashed border-border-light bg-background-card text-text-tertiary">
                         <p className="text-[14px]">Esta seção está em desenvolvimento.</p>
                     </div>
                 );
@@ -47,7 +47,7 @@ export function SettingsContent() {
 
     return (
         <div className="mx-auto flex w-full max-w-[1267px] flex-col gap-6 md:gap-8 p-4 md:p-8 min-w-0">
-            <h1 className="text-[20px] md:text-[24px] font-bold text-slate-900 leading-[32px]">
+            <h1 className="text-[20px] md:text-[24px] font-bold text-text-primary leading-[32px]">
                 Configurações
             </h1>
 
@@ -65,11 +65,11 @@ export function SettingsContent() {
                                 className={cn(
                                     "flex items-center gap-2 md:gap-3 rounded-[8px] px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm font-semibold transition-colors text-left cursor-pointer",
                                     isActive
-                                        ? "bg-[#0d9488] text-white shadow-[0px_4px_10px_0px_rgba(13,148,136,0.25)]"
-                                        : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+                                        ? "bg-brand-primary text-white shadow-[0px_4px_10px_0px_rgba(13,148,136,0.25)]"
+                                        : "text-text-tertiary hover:bg-background-hover hover:text-text-primary"
                                 )}
                             >
-                                <Icon className={cn("w-4 h-4 md:w-[18px] md:h-[18px] shrink-0", isActive ? "text-white" : "text-slate-400")} />
+                                <Icon className={cn("w-4 h-4 md:w-[18px] md:h-[18px] shrink-0", isActive ? "text-white" : "text-text-muted")} />
                                 {item.label}
                             </button>
                         );

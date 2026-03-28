@@ -10,11 +10,11 @@ export function DashboardLayout({ children, breadcrumbs }: { children: React.Rea
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
-        <div className="flex h-screen w-full bg-[#f8fafc] text-slate-900 font-sans overflow-hidden">
+        <div className="flex h-screen w-full bg-background-card text-text-primary font-sans overflow-hidden">
             {/* Overlay for mobile */}
             {isSidebarOpen && (
                 <div
-                    className="fixed inset-0 z-40 bg-slate-900/50 md:hidden"
+                    className="fixed inset-0 z-40 bg-text-primary/50 md:hidden"
                     onClick={() => setIsSidebarOpen(false)}
                     aria-hidden="true"
                 />

@@ -42,7 +42,7 @@ const APPOINTMENT_TYPES: {
   { value: "evaluation", label: "Avaliação", dotColor: "bg-blue-200" },
   { value: "return", label: "Retorno", dotColor: "bg-gray-200" },
   { value: "procedure", label: "Procedimento", dotColor: "bg-purple-200" },
-  { value: "urgency", label: "Urgência", dotColor: "bg-red-200" },
+  { value: "urgency", label: "Urgência", dotColor: "bg-danger-bg" },
   { value: "cleaning", label: "Limpeza", dotColor: "bg-green-200" },
 ];
 
@@ -286,7 +286,7 @@ export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
                         </div>
                       )}
                       {errors.patientName && (
-                        <p className="text-sm text-red-500 mt-2" role="alert" id="patient-error">
+                        <p className="text-sm text-danger-text mt-2" role="alert" id="patient-error">
                           {errors.patientName.message}
                         </p>
                       )}
@@ -344,7 +344,7 @@ export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
                         ))}
                       </div>
                       {errors.dentistId && (
-                        <p className="text-sm text-red-500 mt-2" role="alert">
+                        <p className="text-sm text-danger-text mt-2" role="alert">
                           {errors.dentistId.message}
                         </p>
                       )}
@@ -442,7 +442,7 @@ export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
                           })}
                         </div>
                         {errors.date && (
-                          <p className="text-sm text-red-500 mt-2" role="alert">
+                          <p className="text-sm text-danger-text mt-2" role="alert">
                             {errors.date.message}
                           </p>
                         )}
@@ -499,7 +499,7 @@ export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
                         })}
                       </div>
                       {errors.time && (
-                        <p className="text-sm text-red-500 mt-2" role="alert">
+                        <p className="text-sm text-danger-text mt-2" role="alert">
                           {errors.time.message}
                         </p>
                       )}
@@ -545,7 +545,7 @@ export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
                         ))}
                       </div>
                       {errors.type && (
-                        <p className="text-sm text-red-500 mt-2" role="alert">
+                        <p className="text-sm text-danger-text mt-2" role="alert">
                           {errors.type.message}
                         </p>
                       )}

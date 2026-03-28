@@ -50,12 +50,12 @@ export function HorariosSettings() {
     };
 
     return (
-        <div className="bg-white rounded-[14px] border border-slate-200 shadow-sm p-4 sm:p-6 md:p-8 w-full overflow-hidden">
+        <div className="bg-white rounded-[14px] border border-border-light shadow-sm p-4 sm:p-6 md:p-8 w-full overflow-hidden">
             <div className="mb-6 md:mb-8">
-                <h2 className="text-[20px] font-bold text-slate-900 leading-[28px]">
+                <h2 className="text-[20px] font-bold text-text-primary leading-[28px]">
                     Horários de Atendimento
                 </h2>
-                <p className="text-[14px] text-slate-500 font-medium mt-1">
+                <p className="text-[14px] text-text-tertiary font-medium mt-1">
                     Configure os dias e horários de funcionamento da clínica.
                 </p>
             </div>
@@ -67,10 +67,10 @@ export function HorariosSettings() {
                         const hours = dias?.[index]?.hours ?? "";
 
                         return (
-                            <div key={field.id} className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 border-b border-slate-100 pb-6 last:border-0 last:pb-0">
+                            <div key={field.id} className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 border-b border-border-light pb-6 last:border-0 last:pb-0">
                                 {/* Day Label & Toggle */}
                                 <div className="w-full sm:w-[180px] flex items-center justify-between shrink-0">
-                                    <span className="text-[14px] font-bold text-slate-800">
+                                    <span className="text-[14px] font-bold text-text-primary">
                                         {field.label}
                                     </span>
                                     {/* Toggle Switch */}
@@ -78,7 +78,7 @@ export function HorariosSettings() {
                                         onClick={() => setValue(`dias.${index}.active`, !isActive, { shouldDirty: true })}
                                         className={cn(
                                             "relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors",
-                                            isActive ? 'bg-teal-500' : 'bg-slate-200'
+                                            isActive ? 'bg-brand-primary' : 'bg-background-hover'
                                         )}
                                     >
                                         <span
@@ -94,38 +94,38 @@ export function HorariosSettings() {
                                 {isActive ? (
                                     <div className="flex-1 flex flex-row items-center gap-2 sm:gap-4 w-full">
                                         <div className="flex-1">
-                                            <label className="text-[12px] font-bold text-slate-500 mb-1.5 block">
+                                            <label className="text-[12px] font-bold text-text-tertiary mb-1.5 block">
                                                 Início
                                             </label>
                                             <Input
                                                 type="time"
                                                 {...register(`dias.${index}.start`)}
                                                 className={cn(
-                                                    "h-10 w-full rounded-lg bg-slate-50/50 px-4 text-sm font-medium transition-all focus-visible:border-teal-500 focus-visible:ring-1 focus-visible:ring-teal-500 border-slate-200"
+                                                    "h-10 w-full rounded-lg bg-background-card/50 px-4 text-sm font-medium transition-all focus-visible:border-brand-primary focus-visible:ring-1 focus-visible:ring-brand-primary border-border-light"
                                                 )}
                                             />
                                         </div>
                                         <div className="flex-1">
-                                            <label className="text-[12px] font-bold text-slate-500 mb-1.5 block">
+                                            <label className="text-[12px] font-bold text-text-tertiary mb-1.5 block">
                                                 Término
                                             </label>
                                             <Input
                                                 type="time"
                                                 {...register(`dias.${index}.end`)}
                                                 className={cn(
-                                                    "h-10 w-full rounded-lg bg-slate-50/50 px-4 text-sm font-medium transition-all focus-visible:border-teal-500 focus-visible:ring-1 focus-visible:ring-teal-500 border-slate-200"
+                                                    "h-10 w-full rounded-lg bg-background-card/50 px-4 text-sm font-medium transition-all focus-visible:border-brand-primary focus-visible:ring-1 focus-visible:ring-brand-primary border-border-light"
                                                 )}
                                             />
                                         </div>
                                         <div className="w-12 pt-6 text-right">
-                                            <span className="text-[14px] font-bold text-slate-400">
+                                            <span className="text-[14px] font-bold text-text-muted">
                                                 {hours}
                                             </span>
                                         </div>
                                     </div>
                                 ) : (
                                     <div className="flex-1 flex items-center h-[58px]">
-                                        <span className="text-[14px] font-bold text-slate-400">
+                                        <span className="text-[14px] font-bold text-text-muted">
                                             Fechado
                                         </span>
                                     </div>
@@ -135,37 +135,37 @@ export function HorariosSettings() {
                     })}
                 </div>
 
-                <h3 className="text-[16px] font-bold text-slate-900 mb-4">
+                <h3 className="text-[16px] font-bold text-text-primary mb-4">
                     Intervalo de Atendimento
                 </h3>
 
                 <div className="flex flex-col sm:flex-row gap-6 mb-10">
                     <div className="flex-1">
-                        <label className="text-[12px] font-bold text-slate-500 mb-1.5 block">
+                        <label className="text-[12px] font-bold text-text-tertiary mb-1.5 block">
                             Duração Padrão da Consulta
                         </label>
                         <select
                             {...register("duracaoConsulta")}
                             className={cn(
-                                "flex h-11 w-full rounded-lg border bg-slate-50/50 px-4 text-sm font-medium outline-none transition-all focus:border-teal-500 focus:ring-1 focus:ring-teal-500",
-                                errors.duracaoConsulta ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-slate-200"
+                                "flex h-11 w-full rounded-lg border bg-background-card/50 px-4 text-sm font-medium outline-none transition-all focus:border-brand-primary focus:ring-1 focus:ring-brand-primary",
+                                errors.duracaoConsulta ? "border-danger-text focus:border-danger-text focus:ring-danger-text" : "border-border-light"
                             )}
                         >
                             <option value="30 minutos">30 minutos</option>
                             <option value="45 minutos">45 minutos</option>
                             <option value="1 hora">1 hora</option>
                         </select>
-                        {errors.duracaoConsulta && <span className="text-xs text-red-500 block mt-1">{errors.duracaoConsulta.message}</span>}
+                        {errors.duracaoConsulta && <span className="text-xs text-danger-text block mt-1">{errors.duracaoConsulta.message}</span>}
                     </div>
                     <div className="flex-1">
-                        <label className="text-[12px] font-bold text-slate-500 mb-1.5 block">
+                        <label className="text-[12px] font-bold text-text-tertiary mb-1.5 block">
                             Intervalo entre Consultas
                         </label>
                         <select
                             {...register("intervalo")}
                             className={cn(
-                                "flex h-11 w-full rounded-lg border bg-slate-50/50 px-4 text-sm font-medium outline-none transition-all focus:border-teal-500 focus:ring-1 focus:ring-teal-500",
-                                errors.duracaoConsulta ? "border-red-500 focus:border-red-500 focus:ring-red-500" : "border-slate-200"
+                                "flex h-11 w-full rounded-lg border bg-background-card/50 px-4 text-sm font-medium outline-none transition-all focus:border-brand-primary focus:ring-1 focus:ring-brand-primary",
+                                errors.duracaoConsulta ? "border-danger-text focus:border-danger-text focus:ring-danger-text" : "border-border-light"
                             )}
                         >
                             <option value="Sem intervalo">Sem intervalo</option>
@@ -173,22 +173,22 @@ export function HorariosSettings() {
                             <option value="10 minutos">10 minutos</option>
                             <option value="15 minutos">15 minutos</option>
                         </select>
-                        {errors.intervalo && <span className="text-xs text-red-500 block mt-1">{errors.intervalo.message}</span>}
+                        {errors.intervalo && <span className="text-xs text-danger-text block mt-1">{errors.intervalo.message}</span>}
                     </div>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-6 border-t border-slate-100 mt-4">
+                <div className="flex justify-end gap-3 pt-6 border-t border-border-light mt-4">
                     <Button
                         type="button"
                         variant="outline"
                         onClick={() => reset()}
-                        className="h-10 px-6 rounded-lg text-slate-600 font-semibold text-sm hover:bg-slate-50"
+                        className="h-10 px-6 rounded-lg text-text-secondary font-semibold text-sm hover:bg-background-card"
                     >
                         Descartar
                     </Button>
                     <Button
                         type="submit"
-                        className="h-10 px-6 rounded-lg bg-teal-600 text-white font-semibold text-sm hover:bg-teal-700 shadow-sm"
+                        className="h-10 px-6 rounded-lg bg-brand-primary text-white font-semibold text-sm hover:bg-brand-dark shadow-sm"
                     >
                         Salvar Horários
                     </Button>

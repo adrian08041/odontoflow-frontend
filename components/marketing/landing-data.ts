@@ -25,12 +25,14 @@ export type TeamMember = {
   quote: string;
   initials: string;
   accent: string;
+  photo: string;
 };
 
 export type Testimonial = {
   name: string;
   quote: string;
   accent: string;
+  photo: string;
 };
 
 export type ContactCard = {
@@ -43,7 +45,7 @@ export const treatments: Treatment[] = [
   {
     title: "Implantes Dentários",
     description:
-      "Recupere sua autoestima e função mastigatória com tecnologia de última geração.",
+      "Recupere sua autoestima e função mastigatória com tecnologia suíça de última geração.",
     icon: ShieldCheck,
   },
   {
@@ -55,7 +57,7 @@ export const treatments: Treatment[] = [
   {
     title: "Clareamento Dental",
     description:
-      "Sorriso mais branco e radiante com técnicas seguras e resultados imediatos.",
+      "Sorriso mais branco e radiante com técnicas a laser seguras e resultados imediatos.",
     icon: Sparkles,
   },
   {
@@ -94,6 +96,7 @@ export const teamMembers: TeamMember[] = [
       '"Especialista em alinhadores invisíveis e ortodontia estética com mais de 10 anos de experiência."',
     initials: "AS",
     accent: "from-[var(--color-surface-team-a)] to-[var(--color-white)]",
+    photo: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&h=300&auto=format&fit=crop&crop=faces&q=80",
   },
   {
     name: "Dr. Carlos Souza",
@@ -103,15 +106,17 @@ export const teamMembers: TeamMember[] = [
       '"Referência em reabilitação oral e implantes de carga imediata, focado em tecnologia e precisão."',
     initials: "CS",
     accent: "from-[var(--color-surface-team-b)] to-[var(--color-white)]",
+    photo: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=300&h=300&auto=format&fit=crop&crop=faces&q=80",
   },
   {
-    name: "Dra. Luisa Costa",
+    name: "Dra. Luísa Costa",
     specialty: "Odontopediatria",
     register: "CRO-SP 11223",
     quote:
       '"Apaixonada pelo atendimento infantil, cria um ambiente lúdico e sem traumas para os pequenos."',
     initials: "LC",
     accent: "from-[var(--color-surface-team-c)] to-[var(--color-white)]",
+    photo: "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?w=300&h=300&auto=format&fit=crop&crop=faces&q=80",
   },
 ];
 
@@ -121,18 +126,21 @@ export const testimonials: Testimonial[] = [
     quote:
       '"A melhor experiência que já tive em um dentista. Atendimento pontual, clínica impecável e profissionais extremamente competentes."',
     accent: "bg-[var(--color-surface-avatar-red)]",
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&h=120&auto=format&fit=crop&crop=face&q=80",
   },
   {
     name: "Mariana Santos",
     quote:
       '"Fiz meu clareamento e o resultado superou todas as expectativas. Sem sensibilidade e com um acompanhamento incrível da Dra. Ana."',
     accent: "bg-[var(--color-surface-avatar-pink)]",
+    photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&h=120&auto=format&fit=crop&crop=face&q=80",
   },
   {
     name: "Felipe Almeida",
     quote:
       '"A OdontoFlow cuidou de toda a minha família. Meus filhos adoram ir ao dentista agora, graças ao carinho da equipe infantil."',
     accent: "bg-[var(--color-surface-avatar-blue)]",
+    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&h=120&auto=format&fit=crop&crop=face&q=80",
   },
 ];
 

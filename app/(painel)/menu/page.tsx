@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function MenuPage() {
     const router = useRouter();
@@ -25,8 +26,8 @@ export default function MenuPage() {
                     initials: parsedUser.initials || "AS"
                 });
             }
-        } catch (e) {
-            console.error("Failed to parse user from local storage", e);
+        } catch {
+            // Silently ignore parse errors from localStorage
         }
     }, []);
 
@@ -44,12 +45,12 @@ export default function MenuPage() {
         <div className="w-full max-w-md mx-auto px-1 pt-6 pb-24">
             {/* Header/Perfil */}
             <div className="flex items-center gap-4 mb-8">
-                <div className="w-16 h-16 rounded-2xl bg-teal-600 text-white text-xl font-bold flex items-center justify-center shrink-0 shadow-sm">
+                <div className="w-16 h-16 rounded-2xl bg-brand-primary text-white text-xl font-bold flex items-center justify-center shrink-0 shadow-sm">
                     {user.initials}
                 </div>
                 <div>
-                    <h1 className="text-[20px] font-bold text-slate-900 leading-tight">{user.name}</h1>
-                    <p className="text-[14px] text-slate-500">{user.role}</p>
+                    <h1 className="text-[20px] font-bold text-text-primary leading-tight">{user.name}</h1>
+                    <p className="text-[14px] text-text-tertiary">{user.role}</p>
                 </div>
             </div>
 
@@ -59,22 +60,23 @@ export default function MenuPage() {
                     <Link
                         key={index}
                         href={item.href}
-                        className="flex items-center justify-between bg-white px-5 py-4 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-slate-100 hover:bg-slate-50 transition-colors"
+                        className="flex items-center justify-between bg-white px-5 py-4 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-border-light hover:bg-background-card transition-colors"
                     >
-                        <span className="text-slate-700 font-medium text-[15px]">{item.name}</span>
-                        <ChevronRight className="w-5 h-5 text-slate-400 stroke-2" />
+                        <span className="text-text-secondary font-medium text-[15px]">{item.name}</span>
+                        <ChevronRight className="size-5 text-text-muted stroke-2" />
                     </Link>
                 ))}
             </div>
 
             {/* Logout */}
             <div className="mt-6">
-                <button
+                <Button
+                    variant="ghost"
                     onClick={handleLogout}
-                    className="w-full flex items-center justify-center bg-red-50/80 text-red-600 font-bold py-4 rounded-2xl hover:bg-red-100 transition-colors"
+                    className="w-full flex items-center justify-center bg-danger-bg text-danger-text font-bold py-4 rounded-2xl hover:bg-danger-bg transition-colors"
                 >
                     Sair da Conta
-                </button>
+                </Button>
             </div>
         </div>
     );
