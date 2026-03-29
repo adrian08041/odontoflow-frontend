@@ -13,13 +13,13 @@ export function TestimonialsSection() {
         <div className="grid gap-6 lg:grid-cols-3">
           {testimonials.map((testimonial, index) => (
             <ScrollReveal key={testimonial.name} delay={index * 150}>
-              <article className="h-full rounded-[2rem] border border-[var(--color-border-panel)] bg-white p-8 shadow-[0_10px_24px_rgba(var(--shadow-marketing-rgb),0.05)] transition hover:-translate-y-1 hover:shadow-[0_16px_30px_rgba(var(--shadow-marketing-rgb),0.08)]">
+              <article className="flex h-full flex-col rounded-[2rem] border border-[var(--color-border-panel)] bg-white p-8 shadow-[0_10px_24px_rgba(var(--shadow-marketing-rgb),0.05)] transition hover:-translate-y-1 hover:shadow-[0_16px_30px_rgba(var(--shadow-marketing-rgb),0.08)]">
                 <div className="flex items-center gap-1 text-[var(--color-warning-accent-soft)]">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} className="h-5 w-5 fill-current" />
                   ))}
                 </div>
-                <p className="mt-6 text-lg leading-9 text-[var(--color-ink-muted)]">
+                <p className="mt-6 flex-1 text-lg leading-9 text-[var(--color-ink-muted)]">
                   {testimonial.quote}
                 </p>
                 <div className="mt-8 flex items-center gap-4">

@@ -152,7 +152,7 @@ export const contactCards: ContactCard[] = [
   },
   {
     title: "Telefone",
-    lines: ["(11) 3333-3333", "(11) 99999-9999"],
+    lines: ["(34) 3333-3333", "(34) 99999-9999"],
     icon: Phone,
   },
   {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Check, Sparkles, Star } from "lucide-react";
+import { ArrowRight, CalendarDays, Check, ShieldCheck, Sparkles, Star } from "lucide-react";
 
 export function HeroSection() {
   return (
@@ -13,13 +13,13 @@ export function HeroSection() {
             <Sparkles className="h-4 w-4" />
             Tecnologia de ponta em Odontologia
           </div>
-          <h1 className="animate-hero-in-delay-1 mt-8 text-5xl font-black leading-[1.05] tracking-tight text-[var(--color-ink-strong)] md:text-6xl">
+          <h1 className="animate-hero-in-delay-1 mt-8 text-[2.6rem] font-black leading-[1.05] tracking-tight text-[var(--color-ink-strong)] md:text-5xl">
             Seu sorriso merece o
-            <span className="mt-2 block text-[var(--color-brand-teal)]">
+            <span className="mt-2 inline-block text-[var(--color-brand-teal)]">
               melhor cuidado
+              <span className="mt-3 block h-1.5 w-full rounded-full bg-[var(--color-warning-accent-muted)]" />
             </span>
           </h1>
-          <div className="animate-hero-in-delay-1 mt-3 h-1.5 w-44 rounded-full bg-[var(--color-warning-accent-muted)]" />
           <p className="animate-hero-in-delay-2 mt-6 text-xl leading-9 text-[var(--color-text-section)]">
             Agende sua consulta online em segundos. Tratamentos modernos com
             profissionais especializados e atendimento humanizado para toda a
@@ -64,22 +64,31 @@ export function HeroSection() {
         </div>
 
         <div className="animate-hero-in-delay-2 relative mx-auto w-full max-w-[460px]">
-          <div className="animate-float absolute -left-6 top-6 rounded-3xl bg-white px-5 py-4 shadow-[0_16px_38px_rgba(var(--shadow-marketing-rgb),0.12)]">
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-text-muted-alt)]">
-              Qualidade
-            </p>
-            <p className="mt-1 text-xl font-extrabold text-[var(--color-ink-strong)]">
-              Premium
-            </p>
+          <div className="animate-float absolute -left-4 -top-3 z-10 rounded-2xl bg-white px-4 py-3 shadow-[0_16px_38px_rgba(var(--shadow-marketing-rgb),0.12)]">
+            <div className="flex items-center gap-2.5">
+              <ShieldCheck className="h-7 w-7 text-[var(--color-warning-accent-soft)]" />
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-text-muted-alt)]">
+                  Qualidade
+                </p>
+                <p className="mt-0.5 text-lg font-extrabold text-[var(--color-ink-strong)]">
+                  Premium
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="animate-float-delayed absolute -bottom-6 right-0 rounded-3xl bg-white px-5 py-4 shadow-[0_16px_38px_rgba(var(--shadow-marketing-rgb),0.12)]">
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-text-muted-alt)]">
-              Avaliação
-            </p>
-            <p className="mt-1 flex items-center gap-2 text-xl font-extrabold text-[var(--color-ink-strong)]">
-              <Star className="h-5 w-5 fill-[var(--color-warning-accent-soft)] text-[var(--color-warning-accent-soft)]" />
-              4.9/5.0
-            </p>
+          <div className="animate-float-delayed absolute -bottom-3 -right-4 z-10 rounded-2xl bg-white px-4 py-3 shadow-[0_16px_38px_rgba(var(--shadow-marketing-rgb),0.12)]">
+            <div className="flex items-center gap-2.5">
+              <Star className="h-7 w-7 fill-[var(--color-warning-accent-soft)] text-[var(--color-warning-accent-soft)]" />
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-text-muted-alt)]">
+                  Avaliação
+                </p>
+                <p className="mt-0.5 text-lg font-extrabold text-[var(--color-ink-strong)]">
+                  4.9/5.0
+                </p>
+              </div>
+            </div>
           </div>
           <div className="overflow-hidden rounded-[2rem] border-[6px] border-white bg-[var(--color-surface-muted-alt)] shadow-[0_26px_70px_rgba(var(--shadow-marketing-rgb),0.16)]">
             {/* eslint-disable-next-line @next/next/no-img-element */}

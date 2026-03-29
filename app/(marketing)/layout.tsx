@@ -44,7 +44,7 @@ export default function MarketingLayout({
             <div className="flex items-center gap-3 text-[var(--color-brand-teal)]">
               <Phone className="h-5 w-5" />
               <span className="text-base font-bold text-[var(--color-ink-strong)]">
-                (11) 99999-9999
+                (34) 99999-9999
               </span>
             </div>
             <Link
