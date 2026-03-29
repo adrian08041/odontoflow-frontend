@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react"
-import { AlertCircle, CreditCard, Gift, ChevronRight } from "lucide-react"
+import { AlertCircle, CreditCard, Gift, ChevronRight, Bell } from "lucide-react"
 import {
   Card,
   CardHeader,
@@ -18,11 +18,11 @@ const ICON_MAP: Record<string, LucideIcon> = {
 
 const VARIANT_STYLES: Record<
   DashboardAlert["variant"],
-  { bg: string; text: string }
+  { bg: string; text: string; border: string }
 > = {
-  warning: { bg: "bg-warning-bg", text: "text-warning-text" },
-  danger: { bg: "bg-danger-bg", text: "text-danger-text" },
-  success: { bg: "bg-success-bg", text: "text-success-text" },
+  warning: { bg: "bg-warning-bg", text: "text-warning-text", border: "border-warning-text/20" },
+  danger: { bg: "bg-danger-bg", text: "text-danger-text", border: "border-danger-text/20" },
+  success: { bg: "bg-success-bg", text: "text-success-text", border: "border-success-text/20" },
 }
 
 function AlertItem({ alert }: { alert: DashboardAlert }) {
@@ -30,16 +30,16 @@ function AlertItem({ alert }: { alert: DashboardAlert }) {
   const styles = VARIANT_STYLES[alert.variant]
 
   return (
-    <div className="border border-border-light rounded-lg p-3 pr-4 flex gap-4 items-center">
+    <div className={`group flex cursor-pointer items-center gap-4 rounded-xl border ${styles.border} bg-white p-3.5 pr-4 transition-all duration-200 hover:shadow-sm`}>
       <div
-        className={`${styles.bg} rounded-lg size-9 flex items-center justify-center shrink-0`}
+        className={`${styles.bg} flex size-10 shrink-0 items-center justify-center rounded-xl`}
       >
-        {Icon && <Icon className={`size-5 ${styles.text}`} />}
+        {Icon && <Icon className={`size-[18px] ${styles.text}`} />}
       </div>
-      <p className="font-medium text-text-secondary text-sm leading-5 flex-1">
+      <p className="flex-1 text-sm font-medium leading-5 text-text-secondary">
         {alert.message}
       </p>
-      <ChevronRight className="size-4 shrink-0 text-border-light cursor-pointer hover:text-text-secondary transition-colors" />
+      <ChevronRight className="size-4 shrink-0 text-text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-text-secondary" />
     </div>
   )
 }
@@ -50,28 +50,33 @@ interface AlertsPanelProps {
 
 export function AlertsPanel({ alerts }: AlertsPanelProps) {
   return (
-    <Card className="gap-0 p-0 bg-white border-border-light shadow-sm overflow-hidden h-[409px] flex flex-col">
-      <CardHeader className="border-b border-border-light h-[77px] px-6 flex-row items-center justify-between shrink-0 py-0">
-        <CardTitle className="text-text-primary text-lg leading-7">
+    <Card className="flex h-[409px] flex-col gap-0 overflow-hidden border-border-light bg-white p-0 shadow-sm">
+      <CardHeader className="flex h-[77px] shrink-0 flex-row items-center justify-between border-b border-border-light px-6 py-0">
+        <CardTitle className="flex items-center gap-2 text-lg leading-7 text-text-primary">
+          <Bell className="size-5 text-brand-primary" />
           Alertas Próximos
         </CardTitle>
-        <div className="bg-white border border-border-light rounded-full px-2 py-0.5">
-          <span className="font-bold text-text-secondary text-[10px] tracking-wider uppercase">
+        <div className="flex items-center gap-1.5 rounded-full bg-warning-bg px-3 py-1">
+          <span className="relative flex size-2">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-warning-text opacity-75" />
+            <span className="relative inline-flex size-2 rounded-full bg-warning-text" />
+          </span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-warning-text">
             Atenção
           </span>
         </div>
       </CardHeader>
 
-      <CardContent className="p-4 flex flex-col gap-3 flex-1">
+      <CardContent className="flex flex-1 flex-col gap-3 p-5">
         {alerts.map((alert) => (
           <AlertItem key={alert.id} alert={alert} />
         ))}
       </CardContent>
 
-      <CardFooter className="p-4 pt-0">
+      <CardFooter className="border-t border-border-light p-4">
         <Button
           variant="outline"
-          className="w-full h-9 rounded-lg font-semibold text-text-secondary text-sm border-border-light hover:bg-background-hover"
+          className="h-10 w-full rounded-xl border-border-light text-sm font-semibold text-text-secondary hover:bg-background-hover hover:text-brand-primary"
         >
           Ver todas as notificações
         </Button>

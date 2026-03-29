@@ -21,36 +21,37 @@ export function StatCard({
   trend,
 }: StatCardProps) {
   return (
-    <Card className="gap-4 p-6 bg-white border-border-light h-[170px] shadow-none">
-      <div className="flex justify-between items-start">
-        <p className="font-medium text-text-tertiary text-sm leading-5">
-          {title}
-        </p>
-        <div className="bg-white rounded-lg size-9 flex items-center justify-center shrink-0">
+    <Card className="group relative overflow-hidden border-border-light bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md">
+      <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-3">
+          <p className="text-sm font-medium leading-5 text-text-tertiary">
+            {title}
+          </p>
+          <div className="flex items-baseline gap-2">
+            <p className="text-3xl font-bold tracking-tight text-text-primary">
+              {value}
+            </p>
+            {subtitle && (
+              <span className="text-sm font-medium leading-5 text-text-muted">
+                {subtitle}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 transition-colors duration-300 group-hover:bg-brand-primary/20">
           <Icon className="size-5 text-brand-primary" />
         </div>
       </div>
 
-      <div className="flex items-baseline gap-2">
-        <p className="font-bold text-text-primary text-2xl leading-8">
-          {value}
-        </p>
-        {subtitle && (
-          <span className="font-medium text-text-muted text-sm leading-5">
-            {subtitle}
-          </span>
-        )}
-      </div>
-
       {trend && (
-        <div className="flex items-center gap-1.5">
-          <div className="bg-success-bg rounded-full h-5 px-2 flex items-center gap-1">
+        <div className="mt-4 flex items-center gap-2 border-t border-border-light pt-4">
+          <div className="flex items-center gap-1 rounded-full bg-success-bg px-2 py-0.5">
             <TrendingUp className="size-3 text-success-text" />
-            <span className="font-semibold text-success-text text-xs leading-4">
+            <span className="text-xs font-semibold leading-4 text-success-text">
               {trend.value}
             </span>
           </div>
-          <span className="text-text-muted text-xs leading-4">
+          <span className="text-xs leading-4 text-text-muted">
             {trend.label}
           </span>
         </div>
