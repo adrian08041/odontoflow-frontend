@@ -2,19 +2,30 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { loginSchema, type LoginFormData } from "@/lib/schemas/login-schema";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner"; // If you used sonner for toasts
+import { toast } from "sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { api } from "@/lib/api";
+
+interface AuthResponse {
+  token: string;
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  initials: string;
+}
 
 export function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -24,28 +35,41 @@ export function LoginForm() {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "admin@odontoflow.com", // Mock já preenchido para facilitar testes
-      password: "senha123", // Mock já preenchido para facilitar testes
-      rememberMe: false, // will handle via standard checkbox
+      email: "",
+      password: "",
+      rememberMe: false,
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    // Simulação assíncrona para feedback visual (opcional)
-    if (data.email === "admin@odontoflow.com" && data.password === "senha123") {
-      toast.success("Bem-vindo(a) de volta!");
+  const onSubmit = async (data: LoginFormData) => {
+    setIsLoading(true);
+    try {
+      const response = await api<AuthResponse>("/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email: data.email, password: data.password }),
+      });
+
+      localStorage.setItem("token", response.token);
       localStorage.setItem("user", JSON.stringify({
-        name: "Dra. Ana Silva",
-        firstName: "Dra. Ana",
-        email: data.email,
-        role: "Ortodontista",
-        initials: "AS"
+        id: response.id,
+        name: response.name,
+        email: response.email,
+        role: response.role,
+        initials: response.initials,
       }));
-      router.push("/dashboard"); // Redireciona para o painel principal
-    } else {
-      toast.error("Credenciais inválidas. Tente novamente.");
-      setError("email", { message: "E-mail ou senha incorretos" });
-      setError("password", { message: "E-mail ou senha incorretos" });
+
+      toast.success("Bem-vindo(a) de volta!");
+      router.push("/dashboard");
+    } catch (error: unknown) {
+      const apiError = error as { message?: string; status?: number };
+      const message = apiError.status === 400
+        ? "E-mail ou senha incorretos"
+        : apiError.message || "Erro ao conectar com o servidor";
+      toast.error(message);
+      setError("email", { message });
+      setError("password", { message });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -176,9 +200,10 @@ export function LoginForm() {
         {/* Submit */}
         <Button
           type="submit"
+          disabled={isLoading}
           className="bg-[#0d9488] hover:bg-teal-700 text-white font-bold text-[16px] leading-[24px] rounded-xl h-[56px] mt-2 shadow-[0px_10px_15px_0px_rgba(0,187,167,0.2),0px_4px_6px_0px_rgba(0,187,167,0.2)]"
         >
-          Entrar
+          {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Entrar"}
         </Button>
       </form>
 
