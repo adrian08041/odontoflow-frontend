@@ -2,22 +2,36 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, User, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { cadastroSchema, type CadastroFormData } from "@/lib/schemas/cadastro-schema";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { api } from "@/lib/api";
+
+interface AuthResponse {
+    token: string;
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    initials: string;
+}
 
 export function CadastroForm() {
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors },
     } = useForm<CadastroFormData>({
         resolver: zodResolver(cadastroSchema),
@@ -29,13 +43,41 @@ export function CadastroForm() {
         },
     });
 
-    const onSubmit = (data: CadastroFormData) => {
-        // eslint-disable-next-line no-console
-        console.log("Formulário de cadastro:", data);
-        toast.success("Conta criada com sucesso! Bem-vindo(a) ao OdontoFlow.");
-        // eslint-disable-next-line no-console
-        console.log("Dados do cadastro:", data);
-        // router.push("/dashboard");
+    const onSubmit = async (data: CadastroFormData) => {
+        setIsLoading(true);
+        try {
+            const response = await api<AuthResponse>("/auth/register", {
+                method: "POST",
+                body: JSON.stringify({
+                    name: data.name,
+                    email: data.email,
+                    password: data.password,
+                }),
+            });
+
+            localStorage.setItem("token", response.token);
+            localStorage.setItem("user", JSON.stringify({
+                id: response.id,
+                name: response.name,
+                email: response.email,
+                role: response.role,
+                initials: response.initials,
+            }));
+
+            toast.success("Conta criada com sucesso! Bem-vindo(a) ao OdontoFlow.");
+            router.push("/dashboard");
+        } catch (error: unknown) {
+            const apiError = error as { message?: string; status?: number };
+            const message = apiError.status === 400
+                ? "E-mail já cadastrado"
+                : apiError.message || "Erro ao conectar com o servidor";
+            toast.error(message);
+            if (apiError.status === 400) {
+                setError("email", { message });
+            }
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -196,9 +238,10 @@ export function CadastroForm() {
                 {/* Submit */}
                 <Button
                     type="submit"
+                    disabled={isLoading}
                     className="bg-[var(--color-brand-primary)] hover:bg-[var(--color-brand-dark)] text-white font-bold text-[16px] leading-[24px] rounded-xl h-[56px] mt-4 shadow-[0px_10px_15px_0px_rgba(0,187,167,0.2),0px_4px_6px_0px_rgba(0,187,167,0.2)]"
                 >
-                    Cadastrar
+                    {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Cadastrar"}
                 </Button>
             </form>
 
