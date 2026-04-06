@@ -91,11 +91,11 @@ export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
   });
 
   const selectedPatient = watch("patientName");
-  const selectedDentist = watch("dentistId");
+  const _selectedDentist = watch("dentistId");
   const selectedDate = watch("date");
   const selectedTime = watch("time");
-  const selectedType = watch("type");
-  const observations = watch("observations");
+  const _selectedType = watch("type");
+  const _observations = watch("observations");
 
   const monthNames = [
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
@@ -163,14 +163,6 @@ export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
 
   function onSubmit(data: FormValues) {
     const dentist = MOCK_DENTISTS.find((d) => d.id === data.dentistId);
-    console.log("Novo agendamento:", {
-      patient: data.patientName,
-      dentist: dentist?.name,
-      date: getFormattedDate(data.date),
-      time: data.time,
-      type: data.type,
-      observations: data.observations,
-    });
     toast.success("Agendamento criado com sucesso!");
     handleClose();
   }

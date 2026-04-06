@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback, type DragEvent } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { toast } from "sonner";
 import { MOCK_APPOINTMENTS } from "@/lib/mock-data";
 import type { Appointment, AgendaView } from "@/lib/types";

@@ -1,4 +1,4 @@
-import { AgendaView } from "@/lib/types";
+import type { AgendaView } from "@/lib/types";
 
 export const APPOINTMENT_COLORS: Record<string, string> = {
   evaluation: "bg-appointment-evaluation",

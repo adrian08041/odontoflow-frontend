@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Search, Bell, ChevronRight, User, Settings, LogOut, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -19,28 +19,33 @@ interface HeaderProps {
 
 export function Header({ breadcrumbs }: HeaderProps) {
     const [searchQuery, setSearchQuery] = useState("");
-    const [userFirstName, setUserFirstName] = useState("");
-    const [userFullName, setUserFullName] = useState("");
-    const [userRole, setUserRole] = useState("");
-    const [userEmail, setUserEmail] = useState("");
-    const [userInitials, setUserInitials] = useState("");
 
-    useEffect(() => {
+    function getUserData() {
         try {
             const storedUser = localStorage.getItem("user");
             if (storedUser) {
                 const parsedUser = JSON.parse(storedUser);
                 const name = parsedUser.name || "";
-                setUserFullName(name);
-                setUserFirstName(name.split(" ").slice(0, 2).join(" "));
-                setUserRole(parsedUser.role || "");
-                setUserEmail(parsedUser.email || "");
-                setUserInitials(parsedUser.initials || name.substring(0, 2).toUpperCase());
+                return {
+                    fullName: name,
+                    firstName: name.split(" ").slice(0, 2).join(" "),
+                    role: parsedUser.role || "",
+                    email: parsedUser.email || "",
+                    initials: parsedUser.initials || name.substring(0, 2).toUpperCase(),
+                };
             }
-        } catch (e) {
-            console.error("Failed to parse user from local storage", e);
+        } catch {
+            // ignore parse errors
         }
-    }, []);
+        return { fullName: "", firstName: "", role: "", email: "", initials: "" };
+    }
+
+    const userData = getUserData();
+    const userFullName = userData.fullName;
+    const userFirstName = userData.firstName;
+    const userRole = userData.role;
+    const userEmail = userData.email;
+    const userInitials = userData.initials;
 
     const today = new Date().toLocaleDateString('pt-BR', {
         weekday: 'long',
