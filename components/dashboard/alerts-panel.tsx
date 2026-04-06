@@ -1,5 +1,4 @@
-import type { LucideIcon } from "lucide-react"
-import { AlertCircle, CreditCard, Gift, ChevronRight, Bell } from "lucide-react"
+import { AlertCircle, CreditCard, Gift, ChevronRight, Bell, type LucideIcon } from "lucide-react"
 import {
   Card,
   CardHeader,

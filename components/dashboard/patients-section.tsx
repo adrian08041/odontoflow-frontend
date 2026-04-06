@@ -1,18 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
     Search,
-    ListFilter,
-    ChevronRight,
     Plus,
     Eye,
-    PencilLine,
-    MessageCircle
+    Loader2
 } from "lucide-react";
+
+function formatCpf(cpf: string) {
+    const digits = cpf.replace(/\D/g, "");
+    if (digits.length !== 11) return cpf;
+    return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6, 9)}-${digits.slice(9)}`;
+}
+
+function formatDate(date: string | undefined) {
+    if (!date) return "-";
+    try {
+        return new Date(date + "T00:00:00").toLocaleDateString("pt-BR");
+    } catch {
+        return date;
+    }
+}
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -20,50 +32,82 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-import { MOCK_PATIENTS } from "@/lib/mock-data";
 import { patientSchema, type PatientFormData } from "@/lib/schemas/patient-schema";
-import type { Patient } from "@/lib/types";
+import type { Patient, PageResponse } from "@/lib/types";
+import { api } from "@/lib/api";
 
 export function PatientsSection() {
     const router = useRouter();
-    const [patients, setPatients] = useState<Patient[]>(MOCK_PATIENTS);
+    const [patients, setPatients] = useState<Patient[]>([]);
     const [search, setSearch] = useState("");
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
+    const [insuranceFilter, setInsuranceFilter] = useState("");
+    const [statusFilter, setStatusFilter] = useState("");
+    const [sortBy, setSortBy] = useState("name,asc");
+    const [insurances, setInsurances] = useState<string[]>([]);
 
-    // Form Hook
     const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<PatientFormData>({
         resolver: zodResolver(patientSchema),
     });
 
-    const filteredPatients = patients.filter(
-        (p) => p.name.toLowerCase().includes(search.toLowerCase()) ||
-            p.cpf.includes(search) ||
-            p.phone.includes(search)
-    );
+    useEffect(() => {
+        api<string[]>("/patients/insurances").then(setInsurances).catch(() => {});
+    }, []);
+
+    const fetchPatients = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const searchParam = search ? `&search=${encodeURIComponent(search)}` : "";
+            const insuranceParam = insuranceFilter ? `&insurance=${encodeURIComponent(insuranceFilter)}` : "";
+            const statusParam = statusFilter ? `&status=${encodeURIComponent(statusFilter)}` : "";
+            const data = await api<PageResponse<Patient>>(`/patients?page=${page}&size=20&sort=${sortBy}${searchParam}${insuranceParam}${statusParam}`);
+            setPatients(data.content);
+            setTotalPages(data.totalPages);
+            setTotalElements(data.totalElements);
+        } catch {
+            toast.error("Erro ao carregar pacientes");
+        } finally {
+            setIsLoading(false);
+        }
+    }, [page, search, insuranceFilter, statusFilter, sortBy]);
+
+    useEffect(() => {
+        fetchPatients();
+    }, [fetchPatients]);
+
+    useEffect(() => {
+        setPage(0);
+    }, [search]);
 
     const onSubmit = async (data: PatientFormData) => {
-        // Simulate network request
-        await new Promise((resolve) => setTimeout(resolve, 800));
-
-        const newPatient: Patient = {
-            id: crypto.randomUUID(),
-            name: data.name,
-            cpf: data.cpf,
-            phone: data.phone,
-            insurance: data.insurance || "Particular",
-            status: "Ativo",
-            lastVisit: "Hoje",
-            tags: ["Novo"],
-            avatar: "https://i.pravatar.cc/150?u=" + encodeURIComponent(data.name),
-            createdAt: new Date().toISOString()
-        };
-
-        setPatients([newPatient, ...patients]);
-        toast.success("Paciente adicionado com sucesso!");
-        setIsDialogOpen(false);
-        reset();
+        try {
+            await api<Patient>("/patients", {
+                method: "POST",
+                body: JSON.stringify({
+                    name: data.name,
+                    cpf: data.cpf,
+                    phone: data.phone,
+                    insurance: data.insurance || null,
+                }),
+            });
+            toast.success("Paciente adicionado com sucesso!");
+            setIsDialogOpen(false);
+            reset();
+            fetchPatients();
+        } catch (error: unknown) {
+            const apiError = error as { message?: string };
+            toast.error(apiError.message || "Erro ao criar paciente");
+        }
     };
+
+    const startIndex = page * 20 + 1;
+    const endIndex = Math.min((page + 1) * 20, totalElements);
 
     return (
         <div className="max-w-7xl mx-auto space-y-4 md:space-y-6 pb-4 md:pb-8 pt-2 px-4 sm:px-6 lg:px-8">
@@ -81,54 +125,58 @@ export function PatientsSection() {
                             <Plus className="w-4 h-4 mr-2" /> Novo Paciente
                         </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
+                    <DialogContent className="sm:max-w-[425px] rounded-2xl">
                         <DialogHeader>
-                            <DialogTitle>Novo Paciente</DialogTitle>
+                            <DialogTitle className="text-lg font-bold text-text-primary">Novo Paciente</DialogTitle>
                         </DialogHeader>
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-4">
                             <div className="space-y-2">
-                                <label htmlFor="name" className="text-sm font-medium">Nome</label>
+                                <label htmlFor="name" className="text-sm font-semibold text-text-secondary">Nome</label>
                                 <Input
                                     id="name"
                                     {...register("name")}
                                     placeholder="Ana Carolina Silva"
+                                    className="h-[48px] rounded-xl border-border-light bg-background-card/50 focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-0 focus-visible:border-transparent"
                                     aria-invalid={!!errors.name}
                                     aria-describedby={errors.name ? "name-error" : undefined}
                                 />
                                 {errors.name && <span id="name-error" className="text-xs text-danger-text" role="alert">{errors.name.message}</span>}
                             </div>
                             <div className="space-y-2">
-                                <label htmlFor="cpf" className="text-sm font-medium">CPF</label>
+                                <label htmlFor="cpf" className="text-sm font-semibold text-text-secondary">CPF</label>
                                 <Input
                                     id="cpf"
                                     {...register("cpf")}
                                     placeholder="123.456.789-00"
+                                    className="h-[48px] rounded-xl border-border-light bg-background-card/50 focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-0 focus-visible:border-transparent"
                                     aria-invalid={!!errors.cpf}
                                     aria-describedby={errors.cpf ? "cpf-error" : undefined}
                                 />
                                 {errors.cpf && <span id="cpf-error" className="text-xs text-danger-text" role="alert">{errors.cpf.message}</span>}
                             </div>
                             <div className="space-y-2">
-                                <label htmlFor="phone" className="text-sm font-medium">Telefone</label>
+                                <label htmlFor="phone" className="text-sm font-semibold text-text-secondary">Telefone</label>
                                 <Input
                                     id="phone"
                                     {...register("phone")}
                                     placeholder="(11) 98877-6655"
+                                    className="h-[48px] rounded-xl border-border-light bg-background-card/50 focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-0 focus-visible:border-transparent"
                                     aria-invalid={!!errors.phone}
                                     aria-describedby={errors.phone ? "phone-error" : undefined}
                                 />
                                 {errors.phone && <span id="phone-error" className="text-xs text-danger-text" role="alert">{errors.phone.message}</span>}
                             </div>
                             <div className="space-y-2">
-                                <label htmlFor="insurance" className="text-sm font-medium">Seguro</label>
+                                <label htmlFor="insurance" className="text-sm font-semibold text-text-secondary">Seguro</label>
                                 <Input
                                     id="insurance"
                                     {...register("insurance")}
                                     placeholder="Ex: Unimed, Bradesco..."
+                                    className="h-[48px] rounded-xl border-border-light bg-background-card/50 focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-0 focus-visible:border-transparent"
                                 />
                             </div>
-                            <Button type="submit" disabled={isSubmitting} className="w-full bg-brand-dark hover:bg-brand-dark h-11 shadow-sm mt-4">
-                                {isSubmitting ? "Salvando..." : "Salvar Paciente"}
+                            <Button type="submit" disabled={isSubmitting} className="w-full bg-brand-primary hover:bg-brand-dark text-white font-bold rounded-xl h-[48px] shadow-[0px_10px_15px_0px_rgba(0,187,167,0.2)] mt-4">
+                                {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Salvar Paciente"}
                             </Button>
                         </form>
                     </DialogContent>
@@ -145,20 +193,45 @@ export function PatientsSection() {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Pesquisar por nome, CPF ou telefone..."
-                            className="pl-9 w-full h-10 border border-border-light bg-background-card/50 text-[14px] placeholder:text-text-muted rounded-[8px]"
+                            className="pl-9 w-full h-10 border border-border-light bg-background-card/50 text-[14px] placeholder:text-text-muted rounded-xl focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-0 focus-visible:border-transparent"
                             aria-label="Buscar pacientes"
                         />
                     </div>
-                    <div className="flex gap-2 w-full lg:w-auto overflow-x-auto shrink-0">
-                        <Button variant="outline" className="h-10 text-text-secondary bg-white border-border-light whitespace-nowrap rounded-[8px] px-3 font-medium text-[13px] shadow-sm">
-                            <ListFilter className="w-4 h-4 mr-2 text-text-tertiary" /> Filtros <ChevronRight className="w-4 h-4 ml-2 text-text-muted" />
-                        </Button>
-                        <Button variant="outline" className="h-10 text-text-secondary bg-white border-border-light whitespace-nowrap rounded-[8px] px-3 font-medium text-[13px] shadow-sm">
-                            Seguro <ChevronRight className="w-4 h-4 ml-2 text-text-muted" />
-                        </Button>
-                        <Button variant="outline" className="h-10 text-text-secondary bg-white border-border-light whitespace-nowrap rounded-[8px] px-3 font-medium text-[13px] shadow-sm">
-                            Ordenar por <ChevronRight className="w-4 h-4 ml-2 text-text-muted" />
-                        </Button>
+                    <div className="flex gap-2 w-full lg:w-auto shrink-0 items-center">
+                        <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v === "all" ? "" : v); setPage(0); }}>
+                            <SelectTrigger className="h-10 w-[130px] rounded-[8px] text-[13px] font-medium border-border-light bg-white shadow-sm cursor-pointer">
+                                <SelectValue placeholder="Status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Todos</SelectItem>
+                                <SelectItem value="Ativo">Ativo</SelectItem>
+                                <SelectItem value="Pendente">Pendente</SelectItem>
+                            </SelectContent>
+                        </Select>
+
+                        <Select value={insuranceFilter} onValueChange={(v) => { setInsuranceFilter(v === "all" ? "" : v); setPage(0); }}>
+                            <SelectTrigger className="h-10 w-[160px] rounded-[8px] text-[13px] font-medium border-border-light bg-white shadow-sm cursor-pointer">
+                                <SelectValue placeholder="Seguro" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">Todos</SelectItem>
+                                {insurances.map((ins) => (
+                                    <SelectItem key={ins} value={ins}>{ins}</SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+
+                        <Select value={sortBy} onValueChange={setSortBy}>
+                            <SelectTrigger className="h-10 w-[160px] rounded-[8px] text-[13px] font-medium border-border-light bg-white shadow-sm cursor-pointer text-text-secondary">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="name,asc">Nome (A-Z)</SelectItem>
+                                <SelectItem value="name,desc">Nome (Z-A)</SelectItem>
+                                <SelectItem value="createdAt,desc">Mais recentes</SelectItem>
+                                <SelectItem value="createdAt,asc">Mais antigos</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
 
@@ -172,73 +245,62 @@ export function PatientsSection() {
                                 <TableHead className="font-semibold text-text-tertiary text-[11px] tracking-wider uppercase h-[52px] align-middle px-6">TELEFONE</TableHead>
                                 <TableHead className="font-semibold text-text-tertiary text-[11px] tracking-wider uppercase h-[52px] whitespace-nowrap align-middle px-6">ÚLTIMA VISITA</TableHead>
                                 <TableHead className="font-semibold text-text-tertiary text-[11px] tracking-wider uppercase h-[52px] align-middle px-6">SEGURO</TableHead>
-                                <TableHead className="font-semibold text-text-tertiary text-[11px] tracking-wider uppercase h-[52px] align-middle px-6">TAGS</TableHead>
                                 <TableHead className="font-semibold text-text-tertiary text-[11px] tracking-wider uppercase h-[52px] align-middle px-6 text-right">AÇÕES</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {filteredPatients.length === 0 ? (
+                            {isLoading ? (
                                 <TableRow>
-                                    <TableCell colSpan={7} className="h-32 text-center text-text-tertiary">
+                                    <TableCell colSpan={6} className="h-32 text-center text-text-tertiary">
+                                        <Loader2 className="w-6 h-6 animate-spin mx-auto text-brand-primary" />
+                                    </TableCell>
+                                </TableRow>
+                            ) : patients.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={6} className="h-32 text-center text-text-tertiary">
                                         Nenhum paciente encontrado.
                                     </TableCell>
                                 </TableRow>
                             ) : (
-                                filteredPatients.map((patient) => (
+                                patients.map((patient) => (
                                     <TableRow key={patient.id} className="hover:bg-background-card/50 border-b border-border-light transition-colors group">
-                                        <TableCell className="py-5 align-top px-6 w-[240px]">
-                                            <div className="flex items-start gap-3">
+                                        <TableCell className="py-5 align-middle px-6">
+                                            <div className="flex items-center gap-3">
                                                 <Avatar className="w-10 h-10 border border-border-light shrink-0">
                                                     <AvatarImage src={patient.avatar} alt={patient.name} />
-                                                    <AvatarFallback className="bg-background-hover text-text-secondary text-[13px] font-semibold">
+                                                    <AvatarFallback className="bg-brand-primary text-white text-[13px] font-semibold">
                                                         {patient.name.substring(0, 2).toUpperCase()}
                                                     </AvatarFallback>
                                                 </Avatar>
-                                                <div className="flex flex-col pt-0.5">
-                                                    <p className="font-semibold text-text-secondary text-[14px] leading-tight flex flex-col gap-0.5 max-w-[120px]">
-                                                        <span>{patient.name.split(' ').slice(0, 2).join(' ')}</span>
-                                                        {patient.name.split(' ').length > 2 && <span>{patient.name.split(' ').slice(2).join(' ')}</span>}
+                                                <div className="flex flex-col">
+                                                    <p className="font-semibold text-text-secondary text-[14px] whitespace-nowrap">
+                                                        {patient.name}
                                                     </p>
-                                                    <div className="mt-2 inline-flex">
-                                                        <span
-                                                            className={`text-[11px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap tracking-[0.2px]
-                        ${patient.status === 'Ativo' ? 'bg-success-bg text-success-text' :
-                                                                    patient.status === 'Pendente' ? 'bg-warning-bg text-warning-text' :
-                                                                        'bg-danger-bg text-danger-text'}`}
-                                                        >
-                                                            {patient.status}
-                                                        </span>
-                                                    </div>
+                                                    <span
+                                                        className={`mt-1 text-[11px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap tracking-[0.2px] w-fit
+                                                            ${patient.status === 'Ativo' ? 'bg-success-bg text-success-text' :
+                                                                patient.status === 'Pendente' ? 'bg-warning-bg text-warning-text' :
+                                                                    'bg-danger-bg text-danger-text'}`}
+                                                    >
+                                                        {patient.status}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </TableCell>
-                                        <TableCell className="align-top text-text-tertiary text-[13px] font-medium whitespace-nowrap py-6 px-6">
-                                            {patient.cpf}
+                                        <TableCell className="align-middle text-text-tertiary text-[13px] font-medium whitespace-nowrap py-5 px-6">
+                                            {formatCpf(patient.cpf)}
                                         </TableCell>
-                                        <TableCell className="align-top text-text-tertiary text-[13px] font-medium whitespace-nowrap py-6 px-6">
+                                        <TableCell className="align-middle text-text-tertiary text-[13px] font-medium whitespace-nowrap py-5 px-6">
                                             {patient.phone}
                                         </TableCell>
-                                        <TableCell className="align-top text-text-tertiary text-[13px] font-medium whitespace-nowrap py-6 px-6">
-                                            {patient.lastVisit || "-"}
+                                        <TableCell className="align-middle text-text-tertiary text-[13px] font-medium whitespace-nowrap py-5 px-6">
+                                            {formatDate(patient.lastVisit)}
                                         </TableCell>
-                                        <TableCell className="align-top text-text-secondary text-[13px] font-medium whitespace-nowrap py-6 px-6">
-                                            <div className="flex flex-col gap-0.5">
-                                                {patient.insurance ? patient.insurance.split(' ').map((word, index) => (
-                                                    <span key={index}>{word}</span>
-                                                )) : <span>Particular</span>}
-                                            </div>
+                                        <TableCell className="align-middle text-text-secondary text-[13px] font-medium whitespace-nowrap py-5 px-6">
+                                            {patient.insurance || "Particular"}
                                         </TableCell>
-                                        <TableCell className="align-top py-6 px-6">
-                                            <div className="flex gap-1.5 flex-wrap max-w-[150px] flex-col items-start">
-                                                {patient.tags?.map((tag, i) => (
-                                                    <span key={i} className="px-[6px] py-[2px] bg-background-hover text-text-secondary text-[10px] rounded-[4px] font-bold uppercase tracking-wider flex items-center">
-                                                        {tag}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </TableCell>
-                                        <TableCell className="align-middle px-6 py-6 h-full">
-                                            <div className="flex items-center gap-[18px] opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity justify-end">
+                                        <TableCell className="align-middle px-6 py-5">
+                                            <div className="flex justify-end">
                                                 <Button
                                                     variant="ghost" size="icon"
                                                     onClick={() => router.push(`/pacientes/${patient.id}`)}
@@ -246,12 +308,6 @@ export function PatientsSection() {
                                                     title="Ver Perfil"
                                                 >
                                                     <Eye className="w-[18px] h-[18px]" />
-                                                </Button>
-                                                <Button variant="ghost" size="icon" className="text-brand-primary hover:text-brand-dark transition-colors cursor-pointer" title="Editar">
-                                                    <PencilLine className="w-[18px] h-[18px]" />
-                                                </Button>
-                                                <Button variant="ghost" size="icon" className="text-text-muted hover:text-text-secondary transition-colors cursor-pointer" title="Mensagem">
-                                                    <MessageCircle className="w-[18px] h-[18px]" />
                                                 </Button>
                                             </div>
                                         </TableCell>
@@ -265,15 +321,44 @@ export function PatientsSection() {
                 {/* PAGINATION */}
                 <div className="px-4 sm:px-6 py-[16px] border-t border-border-light flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-b-[14px] shrink-0">
                     <p className="text-[14px] text-text-tertiary font-medium">
-                        Mostrando 1-{filteredPatients.length} de {filteredPatients.length > 4 ? filteredPatients.length : "342"} pacientes
+                        {totalElements > 0
+                            ? `Mostrando ${startIndex}-${endIndex} de ${totalElements} pacientes`
+                            : "Nenhum paciente"}
                     </p>
-                    <div className="flex flex-wrap justify-center items-center gap-[6px]">
-                        <Button variant="outline" size="sm" className="h-[36px] px-4 text-text-tertiary bg-white border-border-light rounded-[6px] font-medium hover:text-text-secondary shadow-sm border">Anterior</Button>
-                        <Button variant="default" size="sm" className="h-[36px] w-[36px] bg-brand-primary hover:bg-brand-dark text-white p-0 flex items-center justify-center font-medium rounded-[6px] border-none shadow-md">1</Button>
-                        <Button variant="outline" size="sm" className="h-[36px] w-[36px] hidden sm:flex text-text-secondary bg-white border-border-light p-0 items-center justify-center font-medium hover:bg-background-card rounded-[6px] shadow-sm border">2</Button>
-                        <Button variant="outline" size="sm" className="h-[36px] w-[36px] hidden sm:flex text-text-secondary bg-white border-border-light p-0 items-center justify-center font-medium hover:bg-background-card rounded-[6px] shadow-sm border">3</Button>
-                        <Button variant="outline" size="sm" className="h-[36px] px-4 text-text-secondary bg-white border-border-light font-medium hover:bg-background-card rounded-[6px] shadow-sm border">Próximo</Button>
-                    </div>
+                    {totalPages > 1 && (
+                        <div className="flex flex-wrap justify-center items-center gap-[6px]">
+                            <Button
+                                variant="outline" size="sm"
+                                disabled={page === 0}
+                                onClick={() => setPage(page - 1)}
+                                className="h-[36px] px-4 text-text-tertiary bg-white border-border-light rounded-[6px] font-medium hover:text-text-secondary shadow-sm border"
+                            >
+                                Anterior
+                            </Button>
+                            {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => (
+                                <Button
+                                    key={i}
+                                    variant={page === i ? "default" : "outline"}
+                                    size="sm"
+                                    onClick={() => setPage(i)}
+                                    className={page === i
+                                        ? "h-[36px] w-[36px] bg-brand-primary hover:bg-brand-dark text-white p-0 flex items-center justify-center font-medium rounded-[6px] border-none shadow-md"
+                                        : "h-[36px] w-[36px] text-text-secondary bg-white border-border-light p-0 flex items-center justify-center font-medium hover:bg-background-card rounded-[6px] shadow-sm border"
+                                    }
+                                >
+                                    {i + 1}
+                                </Button>
+                            ))}
+                            <Button
+                                variant="outline" size="sm"
+                                disabled={page >= totalPages - 1}
+                                onClick={() => setPage(page + 1)}
+                                className="h-[36px] px-4 text-text-secondary bg-white border-border-light font-medium hover:bg-background-card rounded-[6px] shadow-sm border"
+                            >
+                                Próximo
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

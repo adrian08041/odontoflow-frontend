@@ -32,8 +32,9 @@ export default function MenuPage() {
     }, []);
 
     const handleLogout = () => {
+        localStorage.removeItem("token");
         localStorage.removeItem("user");
-        router.push("/");
+        router.push("/login");
     };
 
     const menuItems = [

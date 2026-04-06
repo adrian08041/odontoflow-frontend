@@ -13,7 +13,7 @@ import {
     Settings,
     LogOut
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
@@ -51,8 +51,9 @@ export function Sidebar({ className, onNavigate }: { className?: string; onNavig
     }, []);
 
     const handleLogout = () => {
+        localStorage.removeItem("token");
         localStorage.removeItem("user");
-        router.push("/");
+        router.push("/login");
     };
 
     return (
@@ -107,8 +108,7 @@ export function Sidebar({ className, onNavigate }: { className?: string; onNavig
                 </Link>
                 <div className="flex items-center p-3 mt-2 rounded-xl border border-white/10 bg-white/5">
                     <Avatar className="w-10 h-10 border-2 border-white/20">
-                        <AvatarImage src="https://i.pravatar.cc/150?u=ana-silva" />
-                        <AvatarFallback>{user.initials}</AvatarFallback>
+                        <AvatarFallback className="bg-brand-primary text-white font-medium">{user.initials}</AvatarFallback>
                     </Avatar>
                     <div className="ml-3 flex-1 overflow-hidden">
                         <p className="text-sm font-medium text-white truncate">{user.name}</p>

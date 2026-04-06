@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Search, Bell, ChevronRight, User, Settings, LogOut, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -19,34 +19,33 @@ interface HeaderProps {
 
 export function Header({ breadcrumbs }: HeaderProps) {
     const [searchQuery, setSearchQuery] = useState("");
-    const [userFirstName, setUserFirstName] = useState("Dra. Ana");
-    const [userFullName, setUserFullName] = useState("Dra. Ana Silva");
-    const [userRole, setUserRole] = useState("Dentista");
-    const [userEmail, setUserEmail] = useState("ana.silva@odontoflow.com");
 
-    // Load user data on mount
-    useEffect(() => {
+    function getUserData() {
         try {
             const storedUser = localStorage.getItem("user");
             if (storedUser) {
                 const parsedUser = JSON.parse(storedUser);
-                /* eslint-disable react-hooks/set-state-in-effect */
-                if (parsedUser.firstName) {
-                    setUserFirstName(parsedUser.firstName);
-                    setUserFullName(parsedUser.firstName + (parsedUser.lastName ? ` ${parsedUser.lastName}` : ""));
-                }
-                if (parsedUser.role) {
-                    setUserRole(parsedUser.role);
-                }
-                if (parsedUser.email) {
-                    setUserEmail(parsedUser.email);
-                }
-                /* eslint-enable react-hooks/set-state-in-effect */
+                const name = parsedUser.name || "";
+                return {
+                    fullName: name,
+                    firstName: name.split(" ").slice(0, 2).join(" "),
+                    role: parsedUser.role || "",
+                    email: parsedUser.email || "",
+                    initials: parsedUser.initials || name.substring(0, 2).toUpperCase(),
+                };
             }
-        } catch (e) {
-            console.error("Failed to parse user from local storage", e);
+        } catch {
+            // ignore parse errors
         }
-    }, []);
+        return { fullName: "", firstName: "", role: "", email: "", initials: "" };
+    }
+
+    const userData = getUserData();
+    const userFullName = userData.fullName;
+    const userFirstName = userData.firstName;
+    const userRole = userData.role;
+    const userEmail = userData.email;
+    const userInitials = userData.initials;
 
     const today = new Date().toLocaleDateString('pt-BR', {
         weekday: 'long',
@@ -94,7 +93,7 @@ export function Header({ breadcrumbs }: HeaderProps) {
                     <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted" />
                     <Input
                         placeholder="Buscar pacientes, agendamentos..."
-                        className="pl-9 w-48 md:w-64 lg:w-80 bg-background-card border-border-light rounded-full h-9 focus-visible:ring-brand-primary"
+                        className="pl-9 w-48 md:w-64 lg:w-80 bg-background-card border-border-light rounded-full h-9 focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-0 focus-visible:border-transparent"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                     />
@@ -109,16 +108,16 @@ export function Header({ breadcrumbs }: HeaderProps) {
 
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center gap-3 outline-none hover:bg-background-card p-2 rounded-xl transition-colors cursor-pointer border border-transparent hover:border-border-light data-[state=open]:bg-background-card">
-                            <div className="hidden md:flex flex-col items-end text-sm">
-                                <span className="font-bold text-text-secondary leading-tight">{userFullName}</span>
-                                <span className="text-xs text-text-tertiary">{userRole}</span>
-                            </div>
-                            <Avatar className="h-10 w-10 border border-border-light shadow-sm">
+                            <Avatar className="h-10 w-10 border-2 border-border-light">
                                 <AvatarImage src="" alt={userFullName} />
-                                <AvatarFallback className="bg-brand-light text-brand-dark font-medium">
-                                    {userFirstName.substring(0, 2).toUpperCase()}
+                                <AvatarFallback className="bg-brand-primary text-white font-medium">
+                                    {userInitials}
                                 </AvatarFallback>
                             </Avatar>
+                            <div className="hidden md:flex flex-col ml-1 overflow-hidden">
+                                <p className="text-sm font-medium text-text-primary truncate">{userFullName}</p>
+                                <p className="text-xs text-text-tertiary truncate">{userRole}</p>
+                            </div>
                             <ChevronDown className="w-4 h-4 text-text-muted" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-[300px] p-0 overflow-hidden rounded-2xl border-border-light shadow-xl mt-2">
@@ -127,7 +126,7 @@ export function Header({ breadcrumbs }: HeaderProps) {
                                 <Avatar className="h-14 w-14 border-2 border-white/20 shadow-sm relative z-10">
                                     <AvatarImage src="" alt={userFullName} />
                                     <AvatarFallback className="bg-white text-brand-dark font-bold text-lg">
-                                        {userFirstName.substring(0, 2).toUpperCase()}
+                                        {userInitials}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className="flex flex-col text-white relative z-10">
@@ -160,8 +159,9 @@ export function Header({ breadcrumbs }: HeaderProps) {
                                 <DropdownMenuSeparator className="mx-2 my-1" />
 
                                 <DropdownMenuItem className="cursor-pointer gap-3 p-3 rounded-xl hover:bg-danger-bg focus:bg-danger-bg group" onClick={() => {
+                                    localStorage.removeItem("token");
                                     localStorage.removeItem("user");
-                                    window.location.href = "/";
+                                    window.location.href = "/login";
                                 }}>
                                     <div className="h-10 w-10 bg-danger-bg group-hover:bg-danger-bg flex items-center justify-center rounded-xl text-danger-text shrink-0 transition-colors">
                                         <LogOut className="h-5 w-5" />

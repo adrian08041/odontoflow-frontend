@@ -3,8 +3,8 @@ import {
   CheckCircle,
   DollarSign,
   Users,
+  type LucideIcon,
 } from "lucide-react"
-import type { LucideIcon } from "lucide-react"
 import { StatCard } from "@/components/dashboard/stat-card"
 import { TodayScheduleTable } from "@/components/dashboard/today-schedule-table"
 import { GoalsSection } from "@/components/dashboard/goals-section"
