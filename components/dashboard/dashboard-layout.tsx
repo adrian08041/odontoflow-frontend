@@ -1,13 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { Header } from "@/components/dashboard/header";
 import { MobileNav } from "@/components/dashboard/mobile-nav";
 import { Toaster } from "@/components/ui/sonner";
 
 export function DashboardLayout({ children, breadcrumbs }: { children: React.ReactNode, breadcrumbs?: string[] }) {
+    const router = useRouter();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            router.replace("/login");
+        }
+    }, [router]);
 
     return (
         <div className="flex h-screen w-full bg-background-card text-text-primary font-sans overflow-hidden">

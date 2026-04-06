@@ -17,12 +17,23 @@ export interface Patient {
   name: string;
   cpf: string;
   phone: string;
+  email?: string;
   insurance?: string;
-  createdAt: string;
   status?: string;
   lastVisit?: string;
-  tags?: string[];
   avatar?: string;
+  birthDate?: string;
+  gender?: string;
+  address?: string;
+  createdAt: string;
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
 }
 
 export type AppointmentType = "evaluation" | "cleaning" | "procedure" | "return" | "urgency";

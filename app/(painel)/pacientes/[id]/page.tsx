@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, User, Calendar, Stethoscope, Banknote, FileText } from "lucide-react";
+import { ArrowLeft, User, Calendar, Stethoscope, Banknote, FileText, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { MOCK_PATIENTS, PATIENT_TIMELINE, PATIENT_FINANCIAL_RECORDS, PATIENT_DOCUMENTS } from "@/lib/mock-data";
+import { PATIENT_TIMELINE, PATIENT_FINANCIAL_RECORDS, PATIENT_DOCUMENTS } from "@/lib/mock-data";
 import { PatientProfileHeader } from "@/components/pacientes/patient-profile-header";
 import { PatientTabs } from "@/components/pacientes/patient-tabs";
 import { PatientPersonalDataTab } from "@/components/pacientes/patient-personal-data-tab";
 import { PatientTimelineTab } from "@/components/pacientes/patient-timeline-tab";
 import { PatientFinancialTab } from "@/components/pacientes/patient-financial-tab";
 import { PatientDocumentsTab } from "@/components/pacientes/patient-documents-tab";
+import { api } from "@/lib/api";
+import type { Patient } from "@/lib/types";
 
 const TABS = [
   { id: "Dados Pessoais", label: "Dados Pessoais", icon: User },
@@ -25,7 +27,32 @@ export default function PatientProfilePage() {
   const router = useRouter();
   const id = String(params.id);
   const [activeTab, setActiveTab] = useState("Consultas");
-  const patient = MOCK_PATIENTS.find((p) => p.id === id) || MOCK_PATIENTS[0];
+  const [patient, setPatient] = useState<Patient | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPatient() {
+      try {
+        const data = await api<Patient>(`/patients/${id}`);
+        setPatient(data);
+      } catch {
+        router.push("/pacientes");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchPatient();
+  }, [id, router]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin text-brand-primary" />
+      </div>
+    );
+  }
+
+  if (!patient) return null;
 
   return (
     <div className="max-w-5xl mx-auto space-y-6 md:pb-8 pt-2">
