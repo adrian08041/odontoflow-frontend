@@ -127,20 +127,12 @@ export function LoginForm() {
 
         {/* Password Field */}
         <div className="flex flex-col gap-2 relative">
-          <div className="flex items-center justify-between">
-            <label
-              htmlFor="password"
-              className="font-semibold text-[#364153] text-[14px] leading-[20px]"
-            >
-              Senha
-            </label>
-            <button
-              type="button"
-              className="font-bold text-[#0d9488] text-[12px] leading-[16px] tracking-[0.6px] uppercase hover:underline"
-            >
-              Esqueci minha senha
-            </button>
-          </div>
+          <label
+            htmlFor="password"
+            className="font-semibold text-[#364153] text-[14px] leading-[20px]"
+          >
+            Senha
+          </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
               <Lock className="w-5 h-5 text-gray-400" />
@@ -181,20 +173,28 @@ export function LoginForm() {
           )}
         </div>
 
-        {/* Remember Me */}
-        <div className="flex items-center gap-3">
-          <input
-            id="rememberMe"
-            type="checkbox"
-            {...register("rememberMe")}
-            className="w-5 h-5 rounded border-gray-300 text-[#0d9488] focus:ring-[#0d9488] cursor-pointer"
-          />
-          <label
-            htmlFor="rememberMe"
-            className="font-medium text-[#4a5565] text-[14px] leading-[20px] cursor-pointer"
+        {/* Remember Me + Forgot Password */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <input
+              id="rememberMe"
+              type="checkbox"
+              {...register("rememberMe")}
+              className="w-5 h-5 rounded border-gray-300 text-[#0d9488] focus:ring-[#0d9488] cursor-pointer"
+            />
+            <label
+              htmlFor="rememberMe"
+              className="font-medium text-[#4a5565] text-[14px] leading-[20px] cursor-pointer"
+            >
+              Lembrar de mim
+            </label>
+          </div>
+          <Link
+            href="/esqueci-senha"
+            className="font-bold text-[#0d9488] text-[14px] leading-[20px] hover:underline"
           >
-            Lembrar de mim
-          </label>
+            Esqueci minha senha
+          </Link>
         </div>
 
         {/* Submit */}
