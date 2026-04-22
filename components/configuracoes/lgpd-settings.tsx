@@ -122,10 +122,12 @@ export function LGPDSettings() {
               </div>
 
               <div className="flex items-center">
-                <div
+                <button
+                  type="button"
                   onClick={() => handleToggle(setting.id)}
                   className={cn(
                     "relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2",
                     setting.enabled ? "bg-brand-primary" : "bg-background-hover",
                   )}
                   role="switch"
@@ -138,7 +140,7 @@ export function LGPDSettings() {
                       setting.enabled ? "translate-x-6" : "translate-x-1",
                     )}
                   />
-                </div>
+                </button>
               </div>
             </div>
           );

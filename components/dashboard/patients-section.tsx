@@ -168,7 +168,7 @@ export function PatientsSection() {
   const fetchInsurances = useCallback(async () => {
     try {
       const data = await api<string[]>("/patients/insurances");
-      setInsurances(data);
+      setInsurances(Array.isArray(data) ? data : []);
     } catch {
       setInsurances([]);
     }
@@ -186,9 +186,9 @@ export function PatientsSection() {
         `/patients?page=${page}&size=20&sort=${sortBy}${searchParam}${insuranceParam}${statusParam}`,
       );
 
-      setPatients(data.content);
-      setTotalPages(data.totalPages);
-      setTotalElements(data.totalElements);
+      setPatients(Array.isArray(data?.content) ? data.content : []);
+      setTotalPages(typeof data?.totalPages === "number" ? data.totalPages : 0);
+      setTotalElements(typeof data?.totalElements === "number" ? data.totalElements : 0);
     } catch {
       toast.error("Erro ao carregar pacientes");
     } finally {

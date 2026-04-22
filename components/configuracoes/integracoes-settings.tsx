@@ -120,6 +120,34 @@ function getCategoryBadge(category: IntegrationCategory) {
   return "bg-background-hover text-text-tertiary border-border-light";
 }
 
+function getIntegrationVisual(category: IntegrationCategory) {
+  if (category === "Comunicação") {
+    return {
+      iconName: "message" as const,
+      color: "text-success-text",
+    };
+  }
+
+  if (category === "Automação") {
+    return {
+      iconName: "automation" as const,
+      color: "text-danger-text",
+    };
+  }
+
+  if (category === "Financeiro") {
+    return {
+      iconName: "payment" as const,
+      color: "text-warning-text",
+    };
+  }
+
+  return {
+    iconName: "assistant" as const,
+    color: "text-brand-primary",
+  };
+}
+
 export function IntegracoesSettings() {
   const [integrations, setIntegrations] = useState<Integration[]>(INITIAL_INTEGRATIONS);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -172,6 +200,8 @@ export function IntegracoesSettings() {
       return;
     }
 
+    const integrationVisual = getIntegrationVisual(form.category);
+
     if (editingIntegrationId) {
       setIntegrations((current) =>
         current.map((integration) =>
@@ -179,6 +209,7 @@ export function IntegracoesSettings() {
             ? {
                 ...integration,
                 ...form,
+                ...integrationVisual,
               }
             : integration,
         ),
@@ -190,13 +221,7 @@ export function IntegracoesSettings() {
           id: `integration-${Date.now()}`,
           connected: false,
           status: "Pendente",
-          iconName: form.category === "Financeiro" ? "payment" : form.category === "Automação" ? "automation" : "assistant",
-          color:
-            form.category === "Financeiro"
-              ? "text-warning-text"
-              : form.category === "Automação"
-                ? "text-danger-text"
-                : "text-brand-primary",
+          ...integrationVisual,
           ...form,
         },
         ...current,

@@ -25,7 +25,7 @@ import type { AppointmentType } from "@/lib/types";
 const formSchema = z.object({
   patientName: z.string().min(1, "Selecione um paciente"),
   dentistId: z.string().min(1, "Selecione um dentista"),
-  date: z.number({ message: "Selecione uma data" }),
+  date: z.number({ error: "Selecione uma data" }),
   time: z.string().min(1, "Selecione um horário"),
   type: z.enum(["evaluation", "return", "procedure", "urgency", "cleaning"], {
     message: "Selecione o tipo de agendamento",
@@ -501,6 +501,7 @@ export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
                         size="icon-sm"
                         onClick={() => navigateMonth(-1)}
                         className="border-background-hover"
+                        aria-label="Mês anterior"
                       >
                         <ChevronLeft className="h-4 w-4" />
                       </Button>
@@ -510,6 +511,7 @@ export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
                         size="icon-sm"
                         onClick={() => navigateMonth(1)}
                         className="border-background-hover"
+                        aria-label="Próximo mês"
                       >
                         <ChevronRight className="h-4 w-4" />
                       </Button>
