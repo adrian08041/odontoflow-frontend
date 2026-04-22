@@ -31,5 +31,10 @@ export async function api<T>(endpoint: string, options?: RequestInit): Promise<T
     throw error;
   }
 
-  return response.json();
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  const responseText = await response.text();
+  return responseText ? (JSON.parse(responseText) as T) : (undefined as T);
 }
