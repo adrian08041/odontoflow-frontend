@@ -9,7 +9,10 @@ function parseJsonResponse<T>(responseText: string, status: number): T {
   const trimmedResponseText = responseText.trim();
 
   if (!trimmedResponseText) {
-    return undefined as T;
+    throw {
+      message: "Resposta vazia do servidor",
+      status,
+    } satisfies ApiError;
   }
 
   try {
@@ -48,7 +51,7 @@ export async function api<T>(endpoint: string, options?: RequestInit): Promise<T
     throw error;
   }
 
-  if (response.status === 204) {
+  if (response.status === 204 || response.status === 205) {
     return undefined as T;
   }
 
