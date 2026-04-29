@@ -5,6 +5,26 @@ interface ApiError {
   status: number;
 }
 
+function parseJsonResponse<T>(responseText: string, status: number): T {
+  const trimmedResponseText = responseText.trim();
+
+  if (!trimmedResponseText) {
+    throw {
+      message: "Resposta vazia do servidor",
+      status,
+    } satisfies ApiError;
+  }
+
+  try {
+    return JSON.parse(trimmedResponseText) as T;
+  } catch {
+    throw {
+      message: "Resposta inválida do servidor",
+      status,
+    } satisfies ApiError;
+  }
+}
+
 export async function api<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const token = localStorage.getItem("token");
 
@@ -31,5 +51,10 @@ export async function api<T>(endpoint: string, options?: RequestInit): Promise<T
     throw error;
   }
 
-  return response.json();
+  if (response.status === 204 || response.status === 205) {
+    return undefined as T;
+  }
+
+  const responseText = await response.text();
+  return parseJsonResponse<T>(responseText, response.status);
 }
