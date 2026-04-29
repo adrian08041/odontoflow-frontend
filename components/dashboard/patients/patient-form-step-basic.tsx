@@ -4,7 +4,7 @@ import { Controller, type Control, type FieldErrors, type UseFormRegister } from
 import { IdCard, UserRound } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import type { PatientFormData } from "@/lib/schemas/patient-schema";
-import { formatCpfInput, patientFieldClass } from "./patients-utils";
+import { formatCpfInput, patientFieldClass } from "./patients-shared";
 
 type PatientFormStepBasicProps = {
   control: Control<PatientFormData>;

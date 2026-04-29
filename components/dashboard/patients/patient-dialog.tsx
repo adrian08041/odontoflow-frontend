@@ -1,20 +1,19 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { UserRound } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { FlowDialogFooter } from "@/components/ui/flow-dialog-footer";
+import { FlowDialogHeader } from "@/components/ui/flow-dialog-header";
 import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
 import type { PatientFormData } from "@/lib/schemas/patient-schema";
 import { PatientFormStepBasic } from "./patient-form-step-basic";
 import { PatientFormStepContact } from "./patient-form-step-contact";
-import { PatientFormStepReview } from "./patient-form-step-review";
-import { PATIENT_DIALOG_STEPS } from "./patients-utils";
-import { PatientsStepper } from "./patients-stepper";
+import { PATIENT_DIALOG_STEPS } from "./patients-shared";
 
 type PatientDialogProps = {
   control: Control<PatientFormData>;
@@ -70,10 +69,11 @@ export function PatientDialog({
           </DialogDescription>
         </div>
 
-        <PatientsStepper
+        <FlowDialogHeader
+          currentStep={step}
           description={description}
+          icon={UserRound}
           onClose={onClose}
-          step={step}
           stepLabels={PATIENT_DIALOG_STEPS}
           title={title}
         />
@@ -92,47 +92,78 @@ export function PatientDialog({
             ) : null}
 
             {step === 3 ? (
-              <PatientFormStepReview
-                cpf={cpf}
-                insurance={insurance}
-                isEditing={isEditing}
-                name={name}
-                phone={phone}
-                statusBadgeClass={reviewBadgeClass}
-              />
+              <div className="space-y-6 px-4 py-6 sm:px-6 sm:py-8 md:px-8">
+                <div>
+                  <h3 className="text-[18px] font-black text-[var(--color-ink-panel)]">
+                    Revisão do Cadastro
+                  </h3>
+                  <p className="mt-2 text-[15px] font-medium text-[var(--color-text-caption)]">
+                    Confira os dados antes de salvar o paciente.
+                  </p>
+                </div>
+
+                <div className="rounded-[22px] border border-[var(--color-border-panel)] bg-[radial-gradient(circle_at_top,_rgba(14,158,149,0.05),transparent_38%),var(--color-white)] p-6">
+                  <div className="flex items-start justify-between gap-4 border-b border-[var(--color-border-panel-alt)] pb-5">
+                    <div>
+                      <p className="text-[12px] font-black uppercase tracking-[0.14em] text-[var(--color-text-faint-alt)]">
+                        Paciente
+                      </p>
+                      <p className="mt-2 text-[18px] font-black text-[var(--color-ink-panel)]">
+                        {name || "-"}
+                      </p>
+                    </div>
+
+                    <span
+                      className={`rounded-full px-4 py-2 text-[12px] font-black ${
+                        isEditing ? reviewBadgeClass : "bg-[var(--color-brand-teal)] text-white"
+                      }`}
+                    >
+                      {isEditing ? "Atualização" : "Novo Cadastro"}
+                    </span>
+                  </div>
+
+                  <div className="grid gap-5 pt-5 sm:grid-cols-2">
+                    <div>
+                      <p className="text-[12px] font-black uppercase tracking-[0.14em] text-[var(--color-text-faint-alt)]">
+                        CPF
+                      </p>
+                      <p className="mt-2 text-[15px] font-bold text-[var(--color-ink-panel)]">
+                        {cpf || "-"}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-[12px] font-black uppercase tracking-[0.14em] text-[var(--color-text-faint-alt)]">
+                        Telefone
+                      </p>
+                      <p className="mt-2 text-[15px] font-bold text-[var(--color-ink-panel)]">
+                        {phone || "-"}
+                      </p>
+                    </div>
+
+                    <div className="sm:col-span-2">
+                      <p className="text-[12px] font-black uppercase tracking-[0.14em] text-[var(--color-text-faint-alt)]">
+                        Convênio
+                      </p>
+                      <p className="mt-2 text-[15px] font-bold text-[var(--color-ink-panel)]">
+                        {insurance || "Particular"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             ) : null}
           </div>
 
-          <div className="flex flex-col gap-4 border-t border-[var(--color-border-panel-alt)] px-4 py-4 sm:px-6 sm:py-5 md:flex-row md:items-center md:justify-between md:px-8">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              className="h-11 rounded-[16px] border-[var(--color-border-soft)] px-6 text-[15px] font-bold text-[var(--color-text-panel)]"
-            >
-              {step === 1 ? "Cancelar" : "Voltar"}
-            </Button>
-
-            <div className="flex items-center gap-2">
-              {[1, 2, 3].map((item) => (
-                <span
-                  key={item}
-                  className={`h-2.5 rounded-full ${
-                    item === step ? "w-7 bg-[var(--color-brand-teal)]" : "w-2.5 bg-[var(--color-ring-soft)]"
-                  }`}
-                />
-              ))}
-            </div>
-
-            <Button
-              type="button"
-              onClick={onPrimaryAction}
-              disabled={isSubmitting}
-              className="h-11 rounded-[16px] border-2 border-[var(--color-brand-teal-deep)] bg-[var(--color-brand-teal)] px-8 text-[15px] font-bold text-white shadow-[0_0_0_2px_rgba(255,255,255,0.9),0_12px_24px_rgba(14,158,149,0.22)] hover:bg-[var(--color-brand-teal-dark)]"
-            >
-              {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : submitLabel}
-            </Button>
-          </div>
+          <FlowDialogFooter
+            disabled={isSubmitting}
+            isLoading={isSubmitting}
+            onBack={onClose}
+            onPrimaryAction={onPrimaryAction}
+            primaryLabel={submitLabel}
+            step={step}
+            totalSteps={3}
+          />
         </form>
       </DialogContent>
     </Dialog>

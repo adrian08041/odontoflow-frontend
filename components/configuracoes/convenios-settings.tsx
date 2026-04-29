@@ -11,7 +11,7 @@ import {
   INITIAL_AGREEMENTS,
   type Agreement,
   type AgreementFormState,
-} from "./convenios/agreement-types";
+} from "./convenios/agreement-shared";
 
 export function ConveniosSettings() {
   const [agreements, setAgreements] = useState<Agreement[]>(INITIAL_AGREEMENTS);

@@ -1,6 +1,15 @@
 "use client";
 
-import { Check, UserRound, X } from "lucide-react";
+import { type LucideIcon, Check, X } from "lucide-react";
+
+type FlowDialogHeaderProps = {
+  currentStep?: number;
+  description: string;
+  icon: LucideIcon;
+  onClose: () => void;
+  stepLabels?: string[];
+  title: string;
+};
 
 function StepDot({
   active,
@@ -26,29 +35,25 @@ function StepDot({
   );
 }
 
-type PatientsStepperProps = {
-  description: string;
-  onClose: () => void;
-  step: number;
-  stepLabels: string[];
-  title: string;
-};
-
-export function PatientsStepper({
+export function FlowDialogHeader({
+  currentStep,
   description,
+  icon: Icon,
   onClose,
-  step,
   stepLabels,
   title,
-}: PatientsStepperProps) {
+}: FlowDialogHeaderProps) {
+  const steps = stepLabels ?? [];
+  const activeStep = currentStep ?? 0;
+  const hasSteps = steps.length > 0 && activeStep > 0;
+
   return (
     <div className="bg-[linear-gradient(135deg,var(--color-brand-teal)_0%,var(--color-brand-teal-soft)_100%)] px-4 py-6 text-white sm:px-6 sm:py-7 md:px-8">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-4">
           <div className="flex h-11 w-11 items-center justify-center rounded-[14px] border border-white/20 bg-white/10">
-            <UserRound className="h-6 w-6" />
+            <Icon className="h-6 w-6" />
           </div>
-
           <div>
             <h2 className="text-[20px] font-black">{title}</h2>
             <p className="mt-1 text-[14px] text-white/85">{description}</p>
@@ -65,18 +70,26 @@ export function PatientsStepper({
         </button>
       </div>
 
-      <div className="mt-6 flex items-center justify-center gap-2 text-center sm:mt-8 sm:gap-3">
-        {Array.from({ length: stepLabels.length }, (_, index) => index + 1).map((item, index) => (
-          <div key={item} className="flex items-center gap-2 sm:gap-3">
-            <div className="flex flex-col items-center gap-2">
-              <StepDot active={step === item} done={step > item} value={item} />
-              <span className="text-[11px] font-bold sm:text-[12px]">{stepLabels[index]}</span>
-            </div>
+      {hasSteps ? (
+        <div className="mt-6 flex items-center justify-center gap-2 text-center sm:mt-8 sm:gap-3">
+          {steps.map((label, index) => {
+            const value = index + 1;
 
-            {index < stepLabels.length - 1 ? <div className="h-0.5 w-8 bg-white/30 sm:w-14" /> : null}
-          </div>
-        ))}
-      </div>
+            return (
+              <div key={label} className="flex items-center gap-2 sm:gap-3">
+                <div className="flex flex-col items-center gap-2">
+                  <StepDot active={activeStep === value} done={activeStep > value} value={value} />
+                  <span className="text-[11px] font-bold sm:text-[12px]">{label}</span>
+                </div>
+
+                {index < steps.length - 1 ? (
+                  <div className="h-0.5 w-8 bg-white/30 sm:w-12 md:w-14" />
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
     </div>
   );
 }

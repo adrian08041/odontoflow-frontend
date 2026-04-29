@@ -3,7 +3,7 @@
 import { Controller, type Control, type FieldErrors, type UseFormTrigger } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { APPOINTMENT_TYPES, type AgendaNewDialogValues } from "./agenda-new-dialog-types";
+import { APPOINTMENT_TYPES, type AgendaNewDialogValues } from "./agenda-new-dialog-shared";
 
 type AgendaDetailsStepProps = {
   control: Control<AgendaNewDialogValues>;

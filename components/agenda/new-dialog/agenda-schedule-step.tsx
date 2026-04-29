@@ -10,7 +10,7 @@ import {
   DAY_LABELS,
   MONTH_NAMES,
   OCCUPIED_TIMES,
-} from "./agenda-new-dialog-types";
+} from "./agenda-new-dialog-shared";
 
 type AgendaScheduleStepProps = {
   calendarMonth: number;

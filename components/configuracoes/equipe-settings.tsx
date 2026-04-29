@@ -11,7 +11,7 @@ import {
   INITIAL_TEAM_MEMBERS,
   type TeamFormState,
   type TeamMember,
-} from "./equipe/team-types";
+} from "./equipe/team-shared";
 
 export function EquipeSettings() {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>(INITIAL_TEAM_MEMBERS);

@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Stethoscope } from "lucide-react";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { FlowDialogFooter } from "@/components/ui/flow-dialog-footer";
+import { FlowDialogHeader } from "@/components/ui/flow-dialog-header";
 import { MOCK_DENTISTS, MOCK_PATIENTS } from "@/lib/mock-data";
 import { AgendaDetailsStep } from "./new-dialog/agenda-details-step";
 import { AgendaInfoStep } from "./new-dialog/agenda-info-step";
-import { AgendaNewDialogFooter } from "./new-dialog/agenda-new-dialog-footer";
-import { AgendaNewDialogStepper } from "./new-dialog/agenda-new-dialog-stepper";
 import { AgendaReviewStep } from "./new-dialog/agenda-review-step";
 import { AgendaScheduleStep } from "./new-dialog/agenda-schedule-step";
 import {
@@ -18,12 +19,10 @@ import {
   type AgendaNewDialogProps,
   type AgendaNewDialogValues,
   APPOINTMENT_TYPES,
-} from "./new-dialog/agenda-new-dialog-types";
-import {
   formatAgendaDate,
   getDaysInMonth,
   getFirstDayOfMonth,
-} from "./new-dialog/agenda-new-dialog-utils";
+} from "./new-dialog/agenda-new-dialog-shared";
 import { useForm, useWatch } from "react-hook-form";
 
 export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
@@ -184,11 +183,13 @@ export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
           </DialogDescription>
         </div>
 
-        <AgendaNewDialogStepper
-          step={step}
-          totalSteps={AGENDA_NEW_DIALOG_TOTAL_STEPS}
-          stepLabels={AGENDA_NEW_DIALOG_STEP_LABELS}
+        <FlowDialogHeader
+          currentStep={step}
+          description="Organize a nova consulta com um fluxo mais claro e visual."
+          icon={Stethoscope}
           onClose={handleClose}
+          stepLabels={AGENDA_NEW_DIALOG_STEP_LABELS}
+          title="Novo Agendamento"
         />
 
         <form
@@ -238,9 +239,12 @@ export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
             ) : null}
           </div>
 
-          <AgendaNewDialogFooter
+          <FlowDialogFooter
             onBack={() => (step === 1 ? handleClose() : setStep((current) => current - 1))}
             onPrimaryAction={() => void handlePrimaryAction()}
+            primaryLabel={
+              step < AGENDA_NEW_DIALOG_TOTAL_STEPS ? "Próximo" : "Confirmar Agendamento"
+            }
             step={step}
             totalSteps={AGENDA_NEW_DIALOG_TOTAL_STEPS}
           />

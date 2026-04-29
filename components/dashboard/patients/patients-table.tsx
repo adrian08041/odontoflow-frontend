@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Patient } from "@/lib/types";
-import { formatCpf, formatDate, patientStatusClassMap } from "./patients-utils";
+import { formatCpf, formatDate, patientStatusClassMap } from "./patients-shared";
 
 type PatientsTableProps = {
   deletingPatientId: string | null;

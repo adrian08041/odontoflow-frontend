@@ -20,7 +20,7 @@ import {
   PATIENT_DIALOG_STEPS,
   patientStatusClassMap,
   PHONE_PREFIX,
-} from "./patients/patients-utils";
+} from "./patients/patients-shared";
 
 const EMPTY_FORM: PatientFormData = {
   name: "",

@@ -4,7 +4,7 @@ import { Controller, type Control, type FieldErrors, type UseFormRegister } from
 import { Phone, ShieldPlus } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import type { PatientFormData } from "@/lib/schemas/patient-schema";
-import { formatPhoneInput, patientFieldClass } from "./patients-utils";
+import { formatPhoneInput, patientFieldClass } from "./patients-shared";
 
 type PatientFormStepContactProps = {
   control: Control<PatientFormData>;

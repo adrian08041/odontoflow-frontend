@@ -8,6 +8,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { FlowDialogHeader } from "@/components/ui/flow-dialog-header";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -20,25 +21,27 @@ import type {
   AgreementFormState,
   AgreementStatus,
   AgreementType,
-} from "./agreement-types";
+} from "./agreement-shared";
 
 type AgreementDialogProps = {
-  open: boolean;
   editingAgreementId: string | null;
   form: AgreementFormState;
-  onOpenChange: (open: boolean) => void;
   onFormChange: (form: AgreementFormState) => void;
+  onOpenChange: (open: boolean) => void;
   onSave: () => void;
+  open: boolean;
 };
 
 export function AgreementDialog({
-  open,
   editingAgreementId,
   form,
-  onOpenChange,
   onFormChange,
+  onOpenChange,
   onSave,
+  open,
 }: AgreementDialogProps) {
+  const title = editingAgreementId ? "Editar Convênio" : "Cadastrar Convênio";
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -46,41 +49,20 @@ export function AgreementDialog({
         showCloseButton={false}
       >
         <div className="sr-only">
-          <DialogTitle>{editingAgreementId ? "Editar convênio" : "Novo convênio"}</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
             Formulário para cadastrar ou editar convênios aceitos pela clínica.
           </DialogDescription>
         </div>
 
-        <div className="bg-[linear-gradient(135deg,var(--color-brand-teal)_0%,var(--color-brand-teal-soft)_100%)] px-6 py-8 text-white md:px-8">
-          <div className="flex items-start gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-[16px] border border-white/20 bg-white/10">
-              <ShieldPlus className="h-6 w-6" />
-            </div>
-            <div>
-              <h3 className="text-[20px] font-bold">
-                {editingAgreementId ? "Editar Convênio" : "Cadastrar Convênio"}
-              </h3>
-              <p className="mt-1 text-[14px] text-white/85">
-                Preencha os dados de identificação do convênio.
-              </p>
-            </div>
-          </div>
-        </div>
+        <FlowDialogHeader
+          description="Preencha os dados de identificação do convênio."
+          icon={ShieldPlus}
+          onClose={() => onOpenChange(false)}
+          title={title}
+        />
 
-        <div className="space-y-8 bg-white px-6 py-8 md:px-8">
-          <div>
-            <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text-muted">
-              Identificação do Convênio
-            </p>
-            <h4 className="mt-2 text-[24px] font-bold text-text-primary">
-              Configure o convênio aceito pela clínica
-            </h4>
-            <p className="mt-1 text-[14px] font-medium text-text-tertiary">
-              Organize código, tipo, desconto e status em um cadastro visual mais claro.
-            </p>
-          </div>
-
+        <div className="space-y-6 bg-white px-6 py-8 md:px-8">
           <div className="grid gap-5 md:grid-cols-2">
             <div className="flex min-w-0 flex-col gap-2">
               <label className="text-[13px] font-semibold text-text-secondary">
@@ -112,9 +94,7 @@ export function AgreementDialog({
               <label className="text-[13px] font-semibold text-text-secondary">Tipo</label>
               <Select
                 value={form.type}
-                onValueChange={(value) =>
-                  onFormChange({ ...form, type: value as AgreementType })
-                }
+                onValueChange={(value) => onFormChange({ ...form, type: value as AgreementType })}
               >
                 <SelectTrigger className="h-12 w-full rounded-lg border-border-light bg-background-card/50 px-4 text-sm font-medium text-text-primary">
                   <SelectValue placeholder="Selecione um tipo" />

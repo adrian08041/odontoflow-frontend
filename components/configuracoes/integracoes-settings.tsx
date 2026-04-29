@@ -9,10 +9,10 @@ import { IntegrationDialog } from "./integracoes/integration-dialog";
 import {
   EMPTY_INTEGRATION_FORM,
   INITIAL_INTEGRATIONS,
+  getIntegrationVisual,
   type Integration,
   type IntegrationFormState,
-} from "./integracoes/integration-types";
-import { getIntegrationVisual } from "./integracoes/integration-utils";
+} from "./integracoes/integration-shared";
 
 export function IntegracoesSettings() {
   const [integrations, setIntegrations] = useState<Integration[]>(INITIAL_INTEGRATIONS);

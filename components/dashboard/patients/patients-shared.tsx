@@ -1,5 +1,3 @@
-"use client";
-
 export const PHONE_PREFIX = "(55) ";
 
 export const PATIENT_DIALOG_STEPS = ["Identificação", "Contato", "Revisão"];

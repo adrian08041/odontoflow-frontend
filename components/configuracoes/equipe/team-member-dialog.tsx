@@ -8,6 +8,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { FlowDialogHeader } from "@/components/ui/flow-dialog-header";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -16,25 +17,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { TeamFormState, TeamRole, TeamStatus } from "./team-types";
+import type { TeamFormState, TeamRole, TeamStatus } from "./team-shared";
 
 type TeamMemberDialogProps = {
-  open: boolean;
   editingMemberId: string | null;
   form: TeamFormState;
-  onOpenChange: (open: boolean) => void;
   onFormChange: (form: TeamFormState) => void;
+  onOpenChange: (open: boolean) => void;
   onSave: () => void;
+  open: boolean;
 };
 
 export function TeamMemberDialog({
-  open,
   editingMemberId,
   form,
-  onOpenChange,
   onFormChange,
+  onOpenChange,
   onSave,
+  open,
 }: TeamMemberDialogProps) {
+  const title = editingMemberId ? "Editar Funcionário" : "Adicionar Funcionário";
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -42,44 +45,20 @@ export function TeamMemberDialog({
         showCloseButton={false}
       >
         <div className="sr-only">
-          <DialogTitle>
-            {editingMemberId ? "Editar funcionário" : "Adicionar funcionário"}
-          </DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
             Formulário para cadastrar ou editar membros da equipe.
           </DialogDescription>
         </div>
 
-        <div className="bg-[linear-gradient(135deg,var(--color-brand-teal)_0%,var(--color-brand-teal-soft)_100%)] px-6 py-8 text-white md:px-8">
-          <div className="flex items-start gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-[16px] border border-white/20 bg-white/10">
-              <UsersRound className="h-6 w-6" />
-            </div>
-            <div>
-              <h3 className="text-[20px] font-bold">
-                {editingMemberId ? "Editar Funcionário" : "Adicionar Funcionário"}
-              </h3>
-              <p className="mt-1 text-[14px] text-white/85">
-                Mantenha o cadastro da equipe atualizado no OdontoFlow.
-              </p>
-            </div>
-          </div>
-        </div>
+        <FlowDialogHeader
+          description="Mantenha o cadastro da equipe atualizado no OdontoFlow."
+          icon={UsersRound}
+          onClose={() => onOpenChange(false)}
+          title={title}
+        />
 
-        <div className="space-y-8 bg-white px-6 py-8 md:px-8">
-          <div>
-            <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-text-muted">
-              Dados do Funcionário
-            </p>
-            <h4 className="mt-2 text-[24px] font-bold text-text-primary">
-              Preencha o cadastro da equipe
-            </h4>
-            <p className="mt-1 text-[14px] font-medium text-text-tertiary">
-              Organize os dados principais do colaborador no mesmo padrão do restante da
-              clínica.
-            </p>
-          </div>
-
+        <div className="space-y-6 bg-white px-6 py-8 md:px-8">
           <div className="grid gap-5 md:grid-cols-2">
             <div className="flex min-w-0 flex-col gap-2">
               <label className="text-[13px] font-semibold text-text-secondary">
@@ -106,9 +85,7 @@ export function TeamMemberDialog({
             </div>
 
             <div className="flex min-w-0 flex-col gap-2">
-              <label className="text-[13px] font-semibold text-text-secondary">
-                Telefone
-              </label>
+              <label className="text-[13px] font-semibold text-text-secondary">Telefone</label>
               <Input
                 value={form.phone}
                 onChange={(event) => onFormChange({ ...form, phone: event.target.value })}
@@ -121,9 +98,7 @@ export function TeamMemberDialog({
               <label className="text-[13px] font-semibold text-text-secondary">Cargo</label>
               <Select
                 value={form.role}
-                onValueChange={(value) =>
-                  onFormChange({ ...form, role: value as TeamRole })
-                }
+                onValueChange={(value) => onFormChange({ ...form, role: value as TeamRole })}
               >
                 <SelectTrigger className="h-12 w-full min-w-0 rounded-lg border-border-light bg-background-card/50 px-4 text-sm font-medium text-text-primary">
                   <SelectValue placeholder="Selecione um cargo" />
@@ -142,9 +117,7 @@ export function TeamMemberDialog({
               <label className="text-[13px] font-semibold text-text-secondary">Status</label>
               <Select
                 value={form.status}
-                onValueChange={(value) =>
-                  onFormChange({ ...form, status: value as TeamStatus })
-                }
+                onValueChange={(value) => onFormChange({ ...form, status: value as TeamStatus })}
               >
                 <SelectTrigger className="h-12 w-full min-w-0 rounded-lg border-border-light bg-background-card/50 px-4 text-sm font-medium text-text-primary">
                   <SelectValue placeholder="Selecione o status" />

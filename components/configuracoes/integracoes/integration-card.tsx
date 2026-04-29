@@ -16,8 +16,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import type { Integration } from "./integration-types";
-import { getCategoryBadge, renderIntegrationIcon } from "./integration-utils";
+import {
+  getCategoryBadge,
+  renderIntegrationIcon,
+  type Integration,
+} from "./integration-shared";
 
 type IntegrationCardProps = {
   integration: Integration;

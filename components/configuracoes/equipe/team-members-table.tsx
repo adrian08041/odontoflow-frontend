@@ -17,8 +17,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { TeamMember } from "./team-types";
-import { getTeamMemberInitials, getTeamStatusClasses } from "./team-utils";
+import {
+  getTeamMemberInitials,
+  getTeamStatusClasses,
+  type TeamMember,
+} from "./team-shared";
 
 type TeamMembersTableProps = {
   teamMembers: TeamMember[];

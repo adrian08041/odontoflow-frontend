@@ -6,8 +6,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { MOCK_DENTISTS } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
-import type { AgendaNewDialogValues } from "./agenda-new-dialog-types";
-import { getPersonInitials } from "./agenda-new-dialog-utils";
+import { getPersonInitials, type AgendaNewDialogValues } from "./agenda-new-dialog-shared";
 
 type PatientSearchOption = {
   id: string;

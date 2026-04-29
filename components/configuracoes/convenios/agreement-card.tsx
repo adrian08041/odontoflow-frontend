@@ -15,8 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Agreement } from "./agreement-types";
-import { getAgreementStatusClasses } from "./agreement-utils";
+import { getAgreementStatusClasses, type Agreement } from "./agreement-shared";
 
 type AgreementCardProps = {
   agreement: Agreement;
