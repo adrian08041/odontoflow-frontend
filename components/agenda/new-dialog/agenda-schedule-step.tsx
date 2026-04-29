@@ -16,7 +16,6 @@ type AgendaScheduleStepProps = {
   calendarMonth: number;
   calendarYear: number;
   control: Control<AgendaNewDialogValues>;
-  dayLabels?: string[];
   daysInMonth: number;
   errors: FieldErrors<AgendaNewDialogValues>;
   firstDay: number;
