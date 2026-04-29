@@ -77,11 +77,11 @@ export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
 
   const daysInMonth = getDaysInMonth(calendarYear, calendarMonth);
   const firstDay = getFirstDayOfMonth(calendarYear, calendarMonth);
-  const today = new Date();
-  const todayDate =
-    today.getFullYear() === calendarYear && today.getMonth() === calendarMonth
-      ? today.getDate()
-      : null;
+  const today = useMemo(() => {
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    return currentDate;
+  }, []);
 
   useEffect(() => {
     formContentRef.current?.scrollTo({ top: 0, behavior: "smooth" });
@@ -217,7 +217,7 @@ export function AgendaNewDialog({ open, onOpenChange }: AgendaNewDialogProps) {
                 errors={errors}
                 firstDay={firstDay}
                 navigateMonth={navigateMonth}
-                todayDate={todayDate}
+                today={today}
                 trigger={trigger}
               />
             ) : null}

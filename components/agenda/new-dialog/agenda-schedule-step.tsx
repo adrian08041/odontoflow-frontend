@@ -21,7 +21,7 @@ type AgendaScheduleStepProps = {
   errors: FieldErrors<AgendaNewDialogValues>;
   firstDay: number;
   navigateMonth: (direction: number) => void;
-  todayDate: number | null;
+  today: Date;
   trigger: UseFormTrigger<AgendaNewDialogValues>;
 };
 
@@ -33,7 +33,7 @@ export function AgendaScheduleStep({
   errors,
   firstDay,
   navigateMonth,
-  todayDate,
+  today,
   trigger,
 }: AgendaScheduleStepProps) {
   return (
@@ -97,7 +97,8 @@ export function AgendaScheduleStep({
 
                   {Array.from({ length: daysInMonth }).map((_, index) => {
                     const day = index + 1;
-                    const isPast = day < (todayDate ?? 999);
+                    const calendarDate = new Date(calendarYear, calendarMonth, day);
+                    const isPast = calendarDate < today;
                     const isSelected = field.value === day;
 
                     return (
